@@ -17,12 +17,26 @@ public class SQLiteAdapter {
 	 public static final String KEY_CONTENT1 = "Content1";
 	 public static final String KEY_CONTENT2 = "Content2";
 	
+	 //for relationship table
+	 public static final String RELATIONSHIP ="relationship";
+	 public static final String ROUND="round";
+	 public static final String id_me="id_me";
+	 public static final String id_partner = "id_partner";
+	 public static final String time = "time";
+	 
 	 //create table MY_DATABASE (ID integer primary key, Content text not null);
 	 private static final String SCRIPT_CREATE_DATABASE =
 	  "create table " + MYDATABASE_TABLE + " ("
 	  + KEY_ID + " integer primary key autoincrement, "
 	  + KEY_CONTENT1 + " text not null, "
 	  + KEY_CONTENT2 + " text not null);";
+	 
+	 //create table RELATIONSHIP
+	 private static final String CREATE_RELATIONSHIPS = 
+			 "create table" + RELATIONSHIP + "("
+			 + ROUND + "integer primary key autoincrement," +
+					 id_me + "text not null," + id_partner + "text not null,"
+					 +time + "text not null);";
 	
 	 private SQLiteHelper sqLiteHelper;
 	 private SQLiteDatabase sqLiteDatabase;
@@ -64,6 +78,16 @@ public class SQLiteAdapter {
   contentValues.put(KEY_CONTENT2, content2);
   return sqLiteDatabase.insert(MYDATABASE_TABLE, null, contentValues);
  }
+ 
+ //insert into relationship table
+ public long insertRelationship(String round, String id_me, String id_partner, String time){
+	  ContentValues contentValues = new ContentValues();
+	  contentValues.put(ROUND, round);
+	  contentValues.put(id_me, id_me);
+	  contentValues.put(id_partner, id_partner);
+	  contentValues.put(time, time);
+	 return sqLiteDatabase.insert(RELATIONSHIP,null, contentValues);
+ }
 
  
 
@@ -85,26 +109,17 @@ public class SQLiteAdapter {
 
  public class SQLiteHelper extends SQLiteOpenHelper {
 
-
-
   public SQLiteHelper(Context context, String name,
-
     CursorFactory factory, int version) {
-
    super(context, name, factory, version);
-
   }
 
 
 
   @Override
-
   public void onCreate(SQLiteDatabase db) {
-
    // TODO Auto-generated method stub
-
    db.execSQL(SCRIPT_CREATE_DATABASE);
-
   }
 
 
@@ -112,11 +127,8 @@ public class SQLiteAdapter {
   @Override
 
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
    // TODO Auto-generated method stub
-
   }
-
- } 
+ }
 
 }
