@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+<!--  For some reason or other, this layout must be in the order Button, ListView. The app force closes if it is ListView, Button. -->
+
+   <Button
+        android:id="@+id/viewform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Return to Form" />
+    
+   <ListView
+        android:id="@+id/contentlist"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+   
+</LinearLayout>
