@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:src="@drawable/cooties" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -28,31 +29,45 @@
         android:id="@+id/content2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/add"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Start meeting people!" />
-
+    <!--
     <Button
         android:id="@+id/meet"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Meet" />
-    
-    <Button
-        android:id="@+id/deleteall"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="Clear Database" />
+        android:text="Meet" />
+    -->
 
-    <Button
-        android:id="@+id/viewdata"
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="View Data Entries" />
+        android:layout_height="70dp"
+        android:layout_weight="0.23" >
+
+        <Button
+            android:id="@+id/viewdata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="View Data Entries" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Start meeting people!" />
+
+        <Button
+            android:id="@+id/deleteall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/viewdata"
+            android:layout_alignLeft="@+id/viewdata"
+            android:layout_alignParentRight="true"
+            android:text="Clear Database" />
+
+    </RelativeLayout>
 
 </LinearLayout>

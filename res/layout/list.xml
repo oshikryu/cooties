@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <ListView
-        android:id="@+id/contentlist"
-        android:layout_width="wrap_content"
-        android:layout_height="147dp"
-        android:layout_weight="0.20" >
 
-    </ListView>
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cooties" />
 
     <TextView
-        android:layout_width="fill_parent"
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is activity 2"
-        android:textColor="#000000" />
+        android:text="You have met:"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="317dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.78" >
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/back"
