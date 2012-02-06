@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.content.Intent;
+import android.widget.Toast;
 
 public class CootiesActivity extends Activity {
 
@@ -73,7 +74,6 @@ public class CootiesActivity extends Activity {
 		   setContentView(R.layout.list);
 		      buttonViewForm = (Button)findViewById(R.id.back);
 			  buttonViewForm.setOnClickListener(buttonViewFormOnClickListener);
-		
 
 		  	  } 
 	   };

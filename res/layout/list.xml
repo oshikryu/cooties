@@ -1,36 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="center"
         android:src="@drawable/cooties" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="317dp"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/meeter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView1"
+        android:layout_below="@+id/imageView1"
         android:text="You have met:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout1"
-        android:layout_width="317dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.78" >
-
-    </FrameLayout>
 
     <Button
         android:id="@+id/back"
-        android:layout_width="250px"
-        android:layout_height="55px"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:text="Previous"
-        android:textSize="18px" >
-    </Button>
+        android:textSize="18px" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/meeter"
+        android:layout_width="116dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/back"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/back"
+        android:text="Meet!" />
+
+</RelativeLayout>
