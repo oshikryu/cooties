@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.content.Intent;
 import android.widget.Toast;
+import java.util.Random;
 
 public class CootiesActivity extends Activity {
 
@@ -39,7 +40,7 @@ public class CootiesActivity extends Activity {
 	   public void setUpForm() {
 		   setContentView(R.layout.main);
 	       inputContent1 = (EditText)findViewById(R.id.content1);
-	       inputContent2 = (EditText)findViewById(R.id.content2);
+//	       inputContent2 = (EditText)findViewById(R.id.content2);
 	       buttonAdd = (Button)findViewById(R.id.add);
 	       buttonDeleteAll = (Button)findViewById(R.id.deleteall);
 	       buttonViewData = (Button)findViewById(R.id.viewdata);
@@ -60,16 +61,25 @@ public class CootiesActivity extends Activity {
 	    	   }});   
 	       */
 	   }
+	   public static String determineSick(){
+		   Random generator = new Random();
+		   Integer num = generator.nextInt(6);
+		   if(num==0){
+			   return "yes";
+		   }
+		   else{
+			   return "no " /*+ num.toString()*/;
+		   }
+	   }
 
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
 
-		  @Override
-		
 		  public void onClick(View arg0) {
 			  
 		   // TODO Auto-generated method stub
 		   String data1 = inputContent1.getText().toString();
-		   String data2 = inputContent2.getText().toString();
+//		   String data2 = inputContent2.getText().toString();
+		   String data2 = determineSick();
 		   mySQLiteAdapter.insert(data1, data2);
 		   setContentView(R.layout.list);
 		      buttonViewForm = (Button)findViewById(R.id.back);
@@ -79,7 +89,6 @@ public class CootiesActivity extends Activity {
 	   };
 
 	   Button.OnClickListener buttonDeleteAllOnClickListener  = new Button.OnClickListener(){
-	  @Override
 
 		  public void onClick(View arg0) {
 		   // TODO Auto-generated method stub
@@ -89,8 +98,6 @@ public class CootiesActivity extends Activity {
 	   };
 
 	   Button.OnClickListener buttonViewDataOnClickListener  = new Button.OnClickListener(){
-	  @Override
-
 		  public void onClick(View arg0) {
 		   // TODO Auto-generated method stub
 		  setContentView(R.layout.dataview);
@@ -107,9 +114,8 @@ public class CootiesActivity extends Activity {
 	   };
 	   
 	   Button.OnClickListener buttonViewFormOnClickListener  = new Button.OnClickListener(){
-	  @Override
-
-		  public void onClick(View arg0) {
+	  
+	  public void onClick(View arg0) {
 		   // TODO Auto-generated method stub
 		  setUpForm();
 		  }
