@@ -1,6 +1,7 @@
 package com.umich.cooties;
 
 import android.app.Activity;
+
 import com.umich.cooties.SQLiteAdapter;
 
 import android.app.Activity;
@@ -11,11 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.content.Intent;
 
 public class CootiesActivity extends Activity {
 
+
 	 EditText inputContent1, inputContent2;
-	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm;
+	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm,buttonMeet;
 	 
 	 private SQLiteAdapter mySQLiteAdapter;
 	 ListView listContent;
@@ -39,6 +42,7 @@ public class CootiesActivity extends Activity {
 	       buttonAdd = (Button)findViewById(R.id.add);
 	       buttonDeleteAll = (Button)findViewById(R.id.deleteall);
 	       buttonViewData = (Button)findViewById(R.id.viewdata);
+	       buttonMeet = (Button)findViewById(R.id.meet);
 
 	       mySQLiteAdapter = new SQLiteAdapter(this);
 	       mySQLiteAdapter.openToWrite();
@@ -47,19 +51,24 @@ public class CootiesActivity extends Activity {
 	       buttonAdd.setOnClickListener(buttonAddOnClickListener);
 	       buttonDeleteAll.setOnClickListener(buttonDeleteAllOnClickListener);
 	       buttonViewData.setOnClickListener(buttonViewDataOnClickListener);
+	       buttonMeet.setOnClickListener(new View.OnClickListener(){
+	    	   public void onClick(View view){
+	    		   Intent request = new Intent(view.getContext(), Meet.class);
+	    		   startActivityForResult(request,0);
+	    	   }});   
 	   }
 
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
 
-	  @Override
-
-	  public void onClick(View arg0) {
-	   // TODO Auto-generated method stub
-	   String data1 = inputContent1.getText().toString();
-	   String data2 = inputContent2.getText().toString();
-	   mySQLiteAdapter.insert(data1, data2);
-	  	  } 
-
+		  @Override
+		
+		  public void onClick(View arg0) {
+		   // TODO Auto-generated method stub
+		   String data1 = inputContent1.getText().toString();
+		   String data2 = inputContent2.getText().toString();
+		   mySQLiteAdapter.insert(data1, data2);
+		   
+		  	  } 
 	   };
 
 	   Button.OnClickListener buttonDeleteAllOnClickListener  = new Button.OnClickListener(){

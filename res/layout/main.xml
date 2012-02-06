@@ -36,6 +36,12 @@
         android:text="Start meeting people!" />
 
     <Button
+        android:id="@+id/meet"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Meet" />
+    
+    <Button
         android:id="@+id/deleteall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
