@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/AbsoluteLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/cooties" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter name:" />
-
-    <EditText
-        android:id="@+id/content1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
- <!-- 
+    <AbsoluteLayout
+        android:id="@+id/AbsoluteLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" >
+    </AbsoluteLayout>
+    <!--
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,40 +24,55 @@
         android:id="@+id/meet"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Meet" />
+        android:text="Meet" />
     -->
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_weight="0.23" >
-
-        <Button
-            android:id="@+id/viewdata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="View Data Entries" />
-
-        <Button
-            android:id="@+id/add"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="Start meeting people!" />
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/page2" />
 
-        <Button
-            android:id="@+id/deleteall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/viewdata"
-            android:layout_alignLeft="@+id/viewdata"
-            android:layout_alignParentRight="true"
-            android:text="Clear Database" />
+    <EditText
+        android:id="@+id/content1"
+        android:layout_width="189dp"
+        android:layout_height="wrap_content"
+        android:layout_x="12dp"
+        android:layout_y="410dp" >
 
-    </RelativeLayout>
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="96dp"
+        android:layout_height="61dp"
+        android:layout_x="214dp"
+        android:layout_y="406dp"
+        android:text="Enter" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/viewdata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="6dp"
+        android:layout_y="120dp"
+        android:text="View Data" />
+
+    <Button
+        android:id="@+id/deleteall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="203dp"
+        android:layout_y="112dp"
+        android:text="Clear Database" />
+
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_x="2dp"
+        android:layout_y="377dp"
+        android:text="Enter name:" />
+
+</AbsoluteLayout>

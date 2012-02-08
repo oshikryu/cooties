@@ -4,36 +4,19 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="center"
-        android:src="@drawable/cooties" />
-
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="317dp"
         android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:id="@+id/meeter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-        </LinearLayout>
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/textView1"
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageView1"
-        android:layout_below="@+id/imageView1"
-        android:text="You have met:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/page3edit" />
 
     <Button
         android:id="@+id/back"
@@ -43,14 +26,13 @@
         android:layout_alignParentLeft="true"
         android:text="Previous"
         android:textSize="18px" />
-
+
     <Button
-        android:id="@+id/meeter"
-        android:layout_width="116dp"
+        android:id="@+id/meeting"        
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/back"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/frameLayout1"
         android:text="Meet!" />
-
+<!--  style="@android:style/Animation"-->
 </RelativeLayout>

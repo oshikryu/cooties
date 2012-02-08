@@ -1,20 +1,17 @@
 package com.umich.cooties;
 
-import android.app.Activity;
-
-import com.umich.cooties.SQLiteAdapter;
+import java.util.Random;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.content.Intent;
-import android.widget.Toast;
-import java.util.Random;
 
 public class CootiesActivity extends Activity {
 
@@ -44,7 +41,8 @@ public class CootiesActivity extends Activity {
 	       buttonAdd = (Button)findViewById(R.id.add);
 	       buttonDeleteAll = (Button)findViewById(R.id.deleteall);
 	       buttonViewData = (Button)findViewById(R.id.viewdata);
-//	       buttonMeet = (Button)findViewById(R.id.meet);
+//	       buttonMeet =(Button)findViewById(R.id.meeting);
+	       
 
 	       mySQLiteAdapter = new SQLiteAdapter(this);
 	       mySQLiteAdapter.openToWrite();
@@ -53,7 +51,8 @@ public class CootiesActivity extends Activity {
 	       buttonAdd.setOnClickListener(buttonAddOnClickListener);
 	       buttonDeleteAll.setOnClickListener(buttonDeleteAllOnClickListener);
 	       buttonViewData.setOnClickListener(buttonViewDataOnClickListener);
-	       /*
+	       
+	      /*
 	       buttonMeet.setOnClickListener(new View.OnClickListener(){
 	    	   public void onClick(View view){
 	    		   Intent request = new Intent(view.getContext(), Meet.class);
@@ -71,7 +70,9 @@ public class CootiesActivity extends Activity {
 			   return "no " /*+ num.toString()*/;
 		   }
 	   }
+	   
 
+	   
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
 
 		  public void onClick(View arg0) {
@@ -82,8 +83,10 @@ public class CootiesActivity extends Activity {
 		   String data2 = determineSick();
 		   mySQLiteAdapter.insert(data1, data2);
 		   setContentView(R.layout.list);
-		      buttonViewForm = (Button)findViewById(R.id.back);
-			  buttonViewForm.setOnClickListener(buttonViewFormOnClickListener);
+		   buttonMeet=(Button)findViewById(R.id.meeting);
+		   buttonMeet.setOnClickListener(buttonMeetOnClickListener);
+		    buttonViewForm = (Button)findViewById(R.id.back);
+			buttonViewForm.setOnClickListener(buttonViewFormOnClickListener);
 
 		  	  } 
 	   };
@@ -96,7 +99,7 @@ public class CootiesActivity extends Activity {
 		  }
 
 	   };
-
+	   
 	   Button.OnClickListener buttonViewDataOnClickListener  = new Button.OnClickListener(){
 		  public void onClick(View arg0) {
 		   // TODO Auto-generated method stub
@@ -113,12 +116,18 @@ public class CootiesActivity extends Activity {
 
 	   };
 	   
+	   Button.OnClickListener buttonMeetOnClickListener = new View.OnClickListener(){
+		   public void onClick(View arg0){  
+    	   Intent intent = new Intent(CootiesActivity.this,Meeting.class);
+   		   startActivity(intent);
+	   }};
+	   
 	   Button.OnClickListener buttonViewFormOnClickListener  = new Button.OnClickListener(){
-	  
-	  public void onClick(View arg0) {
-		   // TODO Auto-generated method stub
-		  setUpForm();
-		  }
+		   public void onClick(View arg0) {
+			   // TODO Auto-generated method stub
+			   
+			   setUpForm();
+			}
 
 	   };
 	   
@@ -133,5 +142,6 @@ public class CootiesActivity extends Activity {
 
 	 private void updateList(){
 	  cursor.requery();
-	   }
+	 }
+
 }

@@ -9,7 +9,7 @@
 	<uses-permission android:name="android.permission.NFC" />
 	<uses-feature android:name="android.hardware.nfc" 
 	    android:required="true"/>
-		
+		 <action android:name="android.nfc.action.TAG_DISCOVERED"/>
 		-->
     <application
         android:icon="@drawable/ic_launcher"
@@ -17,18 +17,36 @@
         
         <activity
             android:name=".CootiesActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                
-
+             android:label="@string/app_name"
+          >
+           <intent-filter>
+   				<action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+ 				 </intent-filter> 
         </activity>
                <activity android:name=".Meet"
             	android:label="MeetActivity">
+        </activity>
+        <activity android:name=".FinishMeeting"
+            	android:label="MeetActivityDone">
+           <intent-filter>
+         
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".HaveMet"
+            	android:label="MeetActivityCheck">
+              <intent-filter>
+         
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Meeting"
+            	android:label="MeetActivityIng">
+               <intent-filter>
+         
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
