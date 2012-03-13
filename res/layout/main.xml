@@ -9,70 +9,55 @@
         android:layout_width="match_parent"
         android:layout_height="70dp" >
     </AbsoluteLayout>
-    <!--
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter Infected or Not:" />
-
-    <EditText
-        android:id="@+id/content2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-  
-    <Button
-        android:id="@+id/meet"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Meet" />
-    -->
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/page2" />
-
-    <EditText
-        android:id="@+id/content1"
-        android:layout_width="189dp"
-        android:layout_height="wrap_content"
-        android:layout_x="12dp"
-        android:layout_y="410dp" >
-
-        <requestFocus />
-    </EditText>
-
+        android:src="@drawable/page2" />
     <Button
         android:id="@+id/add"
-        android:layout_width="96dp"
-        android:layout_height="61dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_x="214dp"
-        android:layout_y="406dp"
-        android:text="Enter" />
+        android:layout_y="408dp"
+        android:background="@drawable/b_click_start" />
 
-    <Button
-        android:id="@+id/viewdata"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/first"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_x="6dp"
-        android:layout_y="120dp"
-        android:text="View Data" />
+        android:singleLine="true"
+        android:layout_x="3dp"
+        android:layout_y="410dp" >
 
-    <Button
-        android:id="@+id/deleteall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="203dp"
-        android:layout_y="112dp"
-        android:text="Clear Database" />
+    </EditText>
 
-    <TextView
-        android:id="@+id/TextView1"
+     <TextView
+        android:id="@+id/text1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_x="2dp"
-        android:layout_y="377dp"
-        android:text="Enter name:" />
+        android:layout_x="3dp"
+        android:layout_y="390dp"
+        android:singleLine="true"
+        android:text="first name:" />
+
+    <EditText
+        android:id="@+id/last"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_x="112dp"
+        android:layout_y="410dp"
+        android:imeOptions="actionDone"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_x="114dp"
+        android:layout_y="390dp"
+        android:singleLine="true"
+        android:text="last name:" />
 
 </AbsoluteLayout>
