@@ -41,9 +41,10 @@ public class VirusFunctions extends Activity {
 	
 	//generate a virus amount to add
 	public static void increaseVirus(int infector,int infectee){
+		infector+=1;
 	    Random generator = new Random();
 	    Integer num = generator.nextInt(infector);
-	    infector= infectee+num;
+	    infectee= infector+num;
     }
    
     //generate a virus decrease via time decay (hand only!! for now) 
@@ -52,7 +53,11 @@ public class VirusFunctions extends Activity {
 		 * able to model proper first order decay
 		 */
 		int decreaseAmount = 1;//this is based on 1% of the total infection percentage
-		infectee= infectee-decreaseAmount;
+		if((infectee-1)<0){
+			infectee= infectee-decreaseAmount;
+		}
+
+		
 	}
    
 	//touch time randomizer

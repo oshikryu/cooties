@@ -207,7 +207,7 @@ public class Meeting extends Activity{
 	                    
 	                    //user wipes nose -- need to make this random event --
 	                    VirusFunctions.increaseVirus(my_nose, my_hand);
-	                    
+
 	                    //re-inserting user with updated sickness? this is probably super bad
 	                    CootiesActivity.mySQLiteAdapter.update(my_id, my_hand, CootiesActivity.time++, my_nose, CootiesActivity.time++);
 	             	   Intent intent = new Intent(Meeting.this,HaveMet.class);

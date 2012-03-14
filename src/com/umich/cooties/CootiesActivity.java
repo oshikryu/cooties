@@ -86,7 +86,7 @@ public class CootiesActivity extends Activity {
 	   public  int determineNose(Integer sick){
 		   Integer nose_sick=0;
 		   Random generator = new Random();
-		   Integer num = generator.nextInt(10);
+		   Integer num = generator.nextInt(100);
 		   if(sick.equals(1)){
 			   nose_sick=num;
 		   } 
