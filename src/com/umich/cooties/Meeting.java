@@ -2,8 +2,11 @@ package com.umich.cooties;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
@@ -12,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.graphics.drawable.AnimationDrawable;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -28,6 +32,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -57,8 +62,8 @@ public class Meeting extends Activity{
     static protected SimpleCursorAdapter relCursorAdapter;
 	static protected Cursor relCursor;
 
+	AnimationDrawable animation;
 	public void onCreate(Bundle savedInstanceState){
-		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.meeting);
 		Button back=(Button) findViewById(R.id.back);
@@ -69,6 +74,21 @@ public class Meeting extends Activity{
 				finish();
 			}
 		});
+		//this adds animation to the meeting screen
+		 animation = new AnimationDrawable();
+	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting1), 500);
+	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting2), 500);
+	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting3), 500);
+	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting4), 500);
+	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting5), 500);
+	        animation.setOneShot(false);
+	        
+	        ImageView imageAnim =  (ImageView) findViewById(R.id.anim);
+	        imageAnim.setBackgroundDrawable(animation);
+	        
+	        // run the start() method later on the UI thread
+	        imageAnim.post(new Starter());
+
 		/*
 		Button next=(Button) findViewById(R.id.meetdone);
 		next.setOnClickListener(new View.OnClickListener(){
@@ -102,7 +122,7 @@ public class Meeting extends Activity{
 		 //the variable item will be packaged as an NFC datatype
 		 item = String.valueOf(my_id) + " " + my_first +" " + my_last + " "+ String.valueOf(my_sick) + 
 		 " " + String.valueOf(my_hand) + " "+ String.valueOf(my_nose);
-      	toast(item);//debugging purposes
+//      	toast(item);//debugging purposes
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         // Handle all of our received NFC intents in this activity.
@@ -121,6 +141,14 @@ public class Meeting extends Activity{
         mWriteTagFilters = new IntentFilter[] { tagDetected };
 
 	}
+	
+	//for animation purposes
+    class Starter implements Runnable {
+        public void run() {
+            animation.start();        
+        }
+    }
+    
 	  //get last user 
 	  public Cursor fetchRecord(long ID) throws SQLException {
 		    Cursor mCursor = UserAdapter.sqLiteDatabase.query(true, UserAdapter.USER_TABLE, new String[] {
@@ -136,7 +164,6 @@ public class Meeting extends Activity{
 	    protected void onResume() {
 	        super.onResume();
 	        mResumed = true;
-	        // Sticky notes received from Android
 	        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
 	            NdefMessage[] messages = getNdefMessages(getIntent());
 	            byte[] payload = messages[0].getRecords()[0].getPayload();
@@ -165,21 +192,51 @@ public class Meeting extends Activity{
 	            //this figures out what to pull from the other device
 //	            promptForContent(msgs[0]);
 	        }
+	        //washing hands randomly
+		    Intent myIntent = new Intent(getBaseContext(),
+		    		    RandomReceiver.class);
+		    PendingIntent pendingIntent
+		     = PendingIntent.getBroadcast(getBaseContext(),
+		       0, myIntent, 0);
+		  
+		    AlarmManager alarmManager
+		      = (AlarmManager)getSystemService(ALARM_SERVICE);
+		    Calendar calendar = Calendar.getInstance();
+		    calendar.setTimeInMillis(System.currentTimeMillis());
+		    calendar.add(Calendar.SECOND, 10);
+		    Random generator = new Random();
+		    Integer num = generator.nextInt(300-120)+120;
+		    num*=1000;//this sets num into milliseconds
+
+		    alarmManager.setRepeating(AlarmManager.RTC,
+		      calendar.getTimeInMillis(), num, pendingIntent);
+		    finish();
 
 	     }
+	    
+  	   public void touchNose(){
+ 		   Random generator = new Random();
+ 		   Integer num = generator.nextInt(6);
+ 		   if(num.equals(0)){
+ 			   //switch these values for testing
+ 			   my_nose=VirusFunctions.exchangeVirus(my_hand,my_nose);
+ 			   int holder = my_nose;
+ 			   my_hand=holder;
+ 			   toast("You touched your nose!");
+ 		   }
+
+ 	   }
 	    
 	    //THIS IS WHERE THE MAGIC HAPPENS!
 	    //this step is where you send the NEW notebody using info from the other phone
 	    //store this information as an ArrayList string!
 	    
 	    private void promptForContent(final NdefMessage msg) {
-	        new AlertDialog.Builder(this).setTitle("Complete the meeting?")
-	            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	                public void onClick(DialogInterface arg0, int arg1) {
+//	        new AlertDialog.Builder(this).setTitle("Complete the meeting?")
+//	            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//	                public void onClick(DialogInterface arg0, int arg1) {
 	                	//want to get info from other phone
 	                    body = new String(msg.getRecords()[0].getPayload());
-	                    toast(body);//shows who you're meeting
-	            		
 	                    String[] inputList;
 	                    inputList=body.split(" ");
 	                    //partner info
@@ -187,38 +244,48 @@ public class Meeting extends Activity{
 	                    String partnerLast=inputList[2]; //last
 	                    String partnerHand=inputList[4];//hand sick
 //	                    String partnerNose=inputList[5];//nose sick for potential sneezing infection while shaking hands?
+	                    toast("You are meeting: "+ partnerFirst + " " + partnerLast );//shows who you're meeting
+	                    
 	                    //check sickness functions	                    
 	                    Boolean infect = VirusFunctions.willInfect(my_hand,Integer.parseInt(partnerHand));
-	                    Boolean contract = VirusFunctions.willContract(my_hand, Integer.parseInt(partnerHand));                  
-	                    if(infect){
-	                    	VirusFunctions.exchangeVirus(my_hand,Integer.parseInt(partnerHand));
+	                    Boolean contract = VirusFunctions.willContract(my_hand, Integer.parseInt(partnerHand));
+	                    
+	                    //inoculation or random nose touching
+	                    touchNose();
+	                    
+	            	    //decay
+	                    my_hand=VirusFunctions.virusDecay(my_hand);
+	                                        
+	                    //virus data exchange
+	                    my_hand = VirusFunctions.exchangeVirus(my_hand,Integer.parseInt(partnerHand));
+	                    if(infect | contract){                    	
+	                    	my_sick=1;
 	                    }
+	                    
 	                    
 	                    Integer infectInt = infect.hashCode();
 	                    Integer contractInt = contract.hashCode();
 	                    
-	                    VirusFunctions.changeMe(infectInt);
-	                    VirusFunctions.changeMe(contractInt);
+	                    infectInt= VirusFunctions.changeMe(infectInt);
+	                    contractInt=VirusFunctions.changeMe(contractInt);
 	                    //write this shit into the relationship database
 	                    relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt);
 	                    
 	                    CootiesActivity.mySQLiteAdapter.openToWrite();
-	                    //need to determine random sickness transfers here
-	                    
-	                    //user wipes nose -- need to make this random event --
-	                    VirusFunctions.increaseVirus(my_nose, my_hand);
 
-	                    //re-inserting user with updated sickness? this is probably super bad
-	                    CootiesActivity.mySQLiteAdapter.update(my_id, my_hand, CootiesActivity.time++, my_nose, CootiesActivity.time++);
+	                    //updating user with updated sickness? this is probably super bad
+	                    CootiesActivity.mySQLiteAdapter.update(my_id, my_sick, my_hand, CootiesActivity.time++, my_nose, CootiesActivity.time++);
+	                    
+
 	             	   Intent intent = new Intent(Meeting.this,HaveMet.class);
 	           		   Meeting.this.startActivity(intent);
-	                }
-	            })
-	            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-	                public void onClick(DialogInterface arg0, int arg1) {
-	                    
-	                }
-	            }).show();
+//	                }
+//	            })
+//	            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//	                public void onClick(DialogInterface arg0, int arg1) {
+//	                    
+//	                }
+//	            }).show();
 	    }
 	    
 	//This changes the string within the note
@@ -290,7 +357,7 @@ public class Meeting extends Activity{
 	    }	    
 
 	    private void toast(String text) {
-	        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+	        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	    }
 
 }

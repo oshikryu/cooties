@@ -48,6 +48,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+                <activity android:name=".RandomActivities"
+                    
+            	android:label="Washing Hands"
+            	android:screenOrientation="portrait">
+              <intent-filter>
+         
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+              <receiver android:process=":remote"
+                android:name="RandomReceiver" />
         <activity android:name=".Meeting"
             	android:label="Meeting"
             	android:screenOrientation="portrait">

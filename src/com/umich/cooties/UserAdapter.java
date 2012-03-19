@@ -111,15 +111,16 @@ public class UserAdapter extends Activity {
 		return sqLiteDatabase.insert(USER_TABLE, null, contentValues);
 	}
 
-	public int update(int id, int hand_sick, int hand_sick_time,
+	public int update(int id,int sick, int hand_sick, int hand_sick_time,
 			int nose_sick, int nose_sick_time){
 		    ContentValues cv=new ContentValues();
+		    cv.put(SICK, sick);
 		    cv.put(HAND_SICK, hand_sick);
 		    cv.put(NOSE_SICK, nose_sick);
 		    cv.put(HAND_SICK_TIME, hand_sick_time);
 		    cv.put(NOSE_SICK_TIME, nose_sick_time);
-		    return sqLiteDatabase.update(USER_TABLE, cv, KEY_ID+"=?", 
-		    		new String []{String.valueOf(id)});   
+		    return sqLiteDatabase.update(USER_TABLE, cv, KEY_ID+"="+id, 
+		    		null);   
 	  }
 	
 	

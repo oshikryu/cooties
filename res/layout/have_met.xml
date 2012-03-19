@@ -11,30 +11,45 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/page6" />
-      
-   <ListView
-       android:id="@+id/contentlist"
-       android:layout_width="290dp"
-       android:layout_height="122dp"
-       android:layout_x="11dp"
-       android:layout_y="46dp" >
-
-   </ListView>
-
-   <Button
-       android:id="@+id/meetdone"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_x="228dp"
-       android:layout_y="399dp"
-       android:text="Continue" />
 
    <ListView
        android:id="@+id/reltable"
        android:layout_width="290dp"
        android:layout_height="122dp"
        android:layout_x="10dp"
-       android:layout_y="188dp" >
+       android:layout_y="252dp" >
    </ListView>
+
+   <ListView
+       android:id="@+id/contentlist"
+       android:layout_width="290dp"
+       android:layout_height="122dp"
+       android:layout_x="7dp"
+       android:layout_y="103dp" >
+   </ListView>
+
+   <Button
+       android:id="@+id/meetdone"
+       android:layout_width="194dp"
+       android:layout_height="wrap_content"
+       android:layout_x="66dp"
+       android:layout_y="55dp"
+       android:background="@drawable/b_click_continue"  />
+
+   <Button
+       android:id="@+id/finish"
+       android:layout_width="164dp"
+       android:layout_height="wrap_content"
+       android:layout_x="84dp"
+       android:layout_y="399dp"
+       android:background="@drawable/b_click_finish" />
+
+   <Button
+       android:id="@+id/home"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_x="6dp"
+       android:layout_y="6dp"
+       android:background="@drawable/b_click_home" />
 
 </AbsoluteLayout>

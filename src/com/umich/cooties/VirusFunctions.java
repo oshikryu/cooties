@@ -40,33 +40,34 @@ public class VirusFunctions extends Activity {
 	public static int timeMin=60;
 	
 	//generate a virus amount to add
-	public static void increaseVirus(int infector,int infectee){
-		infector+=1;
+	public static int increaseVirus(int infector){
+		if(infector==0){
+		    Random generator = new Random();
+		    Integer num = generator.nextInt(10);
+		    return infector+num;
+		}
 	    Random generator = new Random();
 	    Integer num = generator.nextInt(infector);
-	    infectee= infector+num;
+	    return infector+num;
     }
    
     //generate a virus decrease via time decay (hand only!! for now) 
-	public static void virusDecay(int infectee){
+	public static int virusDecay(int infectee){
 		/*virus inactivation will be static until
 		 * able to model proper first order decay
 		 */
-		int decreaseAmount = 1;//this is based on 1% of the total infection percentage
-		if((infectee-1)<0){
-			infectee= infectee-decreaseAmount;
+		if(infectee==0){
+			return 0;
 		}
-
-		
-	}
-   
-	//touch time randomizer
-    public static int touch(){
 	    Random generator = new Random();
-	    Integer num = timeMin + generator.nextInt(180);
-	    return num;
-    }
-    
+	    Integer num = generator.nextInt(infectee);
+		int decreaseAmount = infectee%10;//this is based on 1% of the total infection percentage
+		if((infectee-decreaseAmount)>0){
+			return infectee-decreaseAmount;
+		}
+		return infectee;
+	}
+       
     //wash hands
     public static int wash(int handvirus){
     	int afterwash=0;
@@ -93,35 +94,22 @@ public class VirusFunctions extends Activity {
     }
     
     //change from bool hash to 1 or 0
-    public static void changeMe(int code){
+    public static int changeMe(int code){
     	if(code==1231){
-    		code= 1;
+    		return code= 1;
     	}
     	else{
-    		code = 0;
+    		return code = 0;
     		
     	}
     }
     
     //actual hand_sick exchange
-    public static void exchangeVirus(int my_hand, int partner_hand){
+    public static int exchangeVirus(int my_hand, int partner_hand){
     	int totalVirus=my_hand+partner_hand;
-    	if(willInfect(my_hand, partner_hand)){
-    		my_hand=(totalVirus)/2;//splits the total virus amount and equally distributes it
-    		partner_hand=(totalVirus)/2;//same thing but for your partner
-    	}   	
-    }
-    
-    //nose to hand a.k.a. excretion
-    public static void noseToHand(int nose, int hand){
-    	//increase nose to hand
-    	increaseVirus(nose, hand);
-    }
-    
-    //hand to nose a.k.a. infection
-    public static void handToNose(int hand, int nose){
-    	increaseVirus(hand,nose);
+		return totalVirus/2;//splits the total virus amount and equally distributes it
     	
     }
-	
+    
+
 }

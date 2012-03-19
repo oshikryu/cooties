@@ -1,8 +1,11 @@
 package com.umich.cooties;
 
+import java.util.Calendar;
 import java.util.Random;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,7 +25,7 @@ public class CootiesActivity extends Activity {
 
 
 	 EditText inputContent1, inputContent2;
-	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm,buttonMeet;
+	 Button buttonAdd, buttonDeleteAll, back,buttonMeet;
 	 
      static protected UserAdapter mySQLiteAdapter;
 	 static protected SimpleCursorAdapter cursorAdapter;
@@ -47,6 +50,7 @@ public class CootiesActivity extends Activity {
 	       mySQLiteAdapter.openToWrite();
 	       cursor = mySQLiteAdapter.queueAll();
 	       buttonAdd.setOnClickListener(buttonAddOnClickListener);
+	       
 	   }
 	   
 	   //initialize user sickness boolean
@@ -54,10 +58,11 @@ public class CootiesActivity extends Activity {
 		   Random generator = new Random();
 		   Integer num = generator.nextInt(6);
 		   if(num.equals(0)){
-			   return 0;
+			   //switch these values for testing
+			   return 1;
 		   }
 		   else{
-			   return 1 /*+ num.toString()*/;
+			   return 0 /*+ num.toString()*/;
 		   }
 	   }
 	   
@@ -107,11 +112,10 @@ public class CootiesActivity extends Activity {
 			  time=determineSickTime(sickness);
 			  mySQLiteAdapter.insert(first_name, last_name, sickness,hand_sick, time, nose_sick, time);
 			  setContentView(R.layout.gofind);
-			  
 			  buttonMeet=(Button)findViewById(R.id.meeting);
 			  buttonMeet.setOnClickListener(buttonMeetOnClickListener);
-			  buttonViewForm = (Button)findViewById(R.id.back);
-			  buttonViewForm.setOnClickListener(buttonViewFormOnClickListener);
+			  back = (Button)findViewById(R.id.back);
+			  back.setOnClickListener(buttonBackOnClickListener);
 			  //this will close the keyboard, but you will have to restart the app to enter a new name. 
 			  InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			  imm.hideSoftInputFromWindow(inputContent1.getWindowToken(), 0);
@@ -135,7 +139,7 @@ public class CootiesActivity extends Activity {
 	   }};
 
 	   
-	   Button.OnClickListener buttonViewFormOnClickListener  = new Button.OnClickListener(){
+	   Button.OnClickListener buttonBackOnClickListener  = new Button.OnClickListener(){
 		   public void onClick(View arg0) {
 			   // TODO Auto-generated method stub		 
 			   setUpForm();

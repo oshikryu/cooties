@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class HaveMet extends Activity{
 	 ListView listContent, relContent;
-	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm,buttonMeet;
+	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm,buttonMeet, buttonFinish;
 	 	 
 	public void onCreate(Bundle savedInstanceState){
 
@@ -38,7 +38,19 @@ public class HaveMet extends Activity{
 		Meeting.relCursorAdapter = new SimpleCursorAdapter(this, R.layout.row, Meeting.relCursor, start,  end);
 		relContent.setAdapter(Meeting.relCursorAdapter);
 		updateRel();
-				
+	
+		
+		//home button
+		Button home=(Button) findViewById(R.id.home);
+		home.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View view){
+				   Intent intent = new Intent(HaveMet.this,CootiesActivity.class);
+				   HaveMet.this.startActivity(intent);
+
+			}
+		});
+		
+		
 		Button next=(Button) findViewById(R.id.meetdone);
 		next.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View view){
@@ -47,7 +59,14 @@ public class HaveMet extends Activity{
 
 			}
 		});
-		
+		Button finish=(Button) findViewById(R.id.finish);
+		finish.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View view){
+				   Intent intent = new Intent(HaveMet.this,FinishMeeting.class);
+				   HaveMet.this.startActivity(intent);
+
+			}
+		});		
 		
 	}
 	

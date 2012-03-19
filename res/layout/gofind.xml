@@ -23,10 +23,10 @@
 
   <Button
       android:id="@+id/meeting"
-      android:layout_width="98dp"
-      android:layout_height="wrap_content"
-      android:layout_x="179dp"
-      android:layout_y="135dp"
+      android:layout_width="78dp"
+      android:layout_height="40dp"
+      android:layout_x="213dp"
+      android:layout_y="155dp"
       android:background="@drawable/b_click_go" />
     
 </AbsoluteLayout>
