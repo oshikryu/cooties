@@ -58,26 +58,6 @@ public class CootiesActivity extends Activity {
 	       buttonAdd.setOnClickListener(buttonAddOnClickListener);	       
 	   }
 	   
-	   @Override
-	   public boolean onCreateOptionsMenu(Menu menu) {
-	       MenuInflater inflater = getMenuInflater();
-	       inflater.inflate(R.menu.menu, menu);
-	       return true;
-	   }
-	   
-	   @Override
-	   public boolean onOptionsItemSelected(MenuItem item) {
-	       switch (item.getItemId()) {
-	           case R.id.home:     Toast.makeText(this, "You pressed home!", Toast.LENGTH_LONG).show();
-	                               break;
-	           case R.id.havemet:     Toast.makeText(this, "You pressed havemet!", Toast.LENGTH_LONG).show();
-	                               break;
-	           case R.id.exit: Toast.makeText(this, "You pressed  exit!", Toast.LENGTH_LONG).show();
-	                               break;
-	       }
-	       return true;
-	   }
-	   
 	   //initialize user sickness boolean
 	   public static int determineSick(){
 		   Random generator = new Random();
