@@ -1,6 +1,8 @@
 package com.umich.cooties;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -16,8 +18,7 @@ public class HaveMet extends Activity{
 	 ListView listContent, relContent;
 	 Button buttonAdd, buttonDeleteAll, buttonViewData, buttonViewForm,buttonMeet, buttonFinish;
 	 	 
-	public void onCreate(Bundle savedInstanceState){
-
+	public void onCreate(Bundle savedInstanceState){ 
 		 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.have_met);

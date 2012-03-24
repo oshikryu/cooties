@@ -126,7 +126,7 @@ public class Meeting extends Activity{
 		item = String.valueOf(my_id) + " " + my_first +" " + my_last + " "+ String.valueOf(my_sick) + 
 		" " + String.valueOf(my_hand) + " "+ String.valueOf(my_source) + " "+ String.valueOf(my_has_hiv)+  
 		" "+ String.valueOf(my_hiv_sick) + " " + my_probability;
-      	toast(item);//debugging purposes
+//      	toast(item);//debugging purposes
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         // Handle all of our received NFC intents in this activity.
@@ -206,7 +206,7 @@ public class Meeting extends Activity{
 		    Calendar calendar = Calendar.getInstance();
 		    calendar.setTimeInMillis(System.currentTimeMillis());
 		    Random generator = new Random();
-		    Integer num = generator.nextInt(60-30)+30;
+		    Integer num = generator.nextInt(20)+10;
 		    calendar.add(Calendar.SECOND, num);
 
 		    num=num*1000;//this sets num into milliseconds
@@ -217,7 +217,7 @@ public class Meeting extends Activity{
 	     }
   
 	    //THIS IS WHERE THE MAGIC HAPPENS!
-	    //this step is where you send the NEW notebody using info from the other phone
+	    //this function determines the exchanges of infection
 	    //store this information as an ArrayList string!
 	    private void promptForContent(final NdefMessage msg) {
         	//want to get info from other phone
@@ -225,31 +225,36 @@ public class Meeting extends Activity{
             String[] inputList;
             inputList=body.split(" ");
             //partner info
-            String partnerFirst=inputList[1]; // first
-            String partnerLast=inputList[2]; //last
-            String partnerHIV=inputList[5];//hiv sick
-            String partnerHand=inputList[6];//hand sick
-            String partnerSource=inputList[7];//source sick
-            String partnerProb=inputList[8];//shared probability
-
-            toast("You are meeting: "+ partnerFirst + " " + partnerLast + " " + partnerHIV + " " + partnerHand + " " 
-            		+ partnerSource);//shows who you're meeting
+            String partnerFirst = inputList[1]; // first
+            String partnerLast = inputList[2]; //last
+            String partnerIsSick = inputList[3];
+            String partnerHand = inputList[4];//hand sick
+            String partnerHIV = inputList[7];//hiv sick
+            String partnerProb = inputList[8];//shared probability
             
-            //determining which phone's probability to use
-            if(my_sick>Double.parseDouble(partnerHand)){
-            	sharedProbability = my_probability;
+          //determining which phone's probability to use
+            sharedProbability = my_probability;
+            if(my_hand == 0){
+            	if(my_hiv_sick < Double.parseDouble(partnerHIV)){
+            		sharedProbability = Double.parseDouble(partnerProb);
+            	}
             }
-            if(my_sick<=Double.parseDouble(partnerHand)){
-            	sharedProbability = Double.parseDouble(partnerProb);
-            }
+            if(my_hand != 0){
+	            if(my_hand <= Double.parseDouble(partnerHand)){
+	            	sharedProbability = Double.parseDouble(partnerProb);
+	            }
+            }            
+            toast("You are meeting: "+ partnerFirst + " " + partnerLast + " " + sharedProbability);//shows who you're meeting
+            
             /* this is all gastro stuff*/
-            //check sickness functions	                    
+            //check sickness functions	          
+
             Boolean infect = VirusFunctions.willInfect(my_hand,Double.parseDouble(partnerHand));
             Boolean contract = VirusFunctions.willContract(my_hand, Double.parseDouble(partnerHand));	                    
             Integer infectInt = infect.hashCode();
             Integer contractInt = contract.hashCode();	                    
-            infectInt= VirusFunctions.changeMe(infectInt);
-            contractInt=VirusFunctions.changeMe(contractInt);
+            infectInt = VirusFunctions.changeMe(infectInt);
+            contractInt =VirusFunctions.changeMe(contractInt);
             
     	    //decay
             my_hand = VirusFunctions.virusDecay(my_hand);
@@ -258,30 +263,31 @@ public class Meeting extends Activity{
         	double shedding = my_source/10;
             my_hand += shedding;
                                 
-            //contract
-            if(contract){ 
-            	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
-            	my_sick=1;
-            }
-            if(infect){
+            if(contract | infect){
             	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
             }
+               
+            //inoculation here. you can only become sick if you inoculate with a sick hand    
+    	   	Random generator = new Random();
+    	   	Integer inoculation = generator.nextInt(4);
+    	   	if(inoculation.equals(2) & (my_source != 0)){
+    	   		my_source = VirusFunctions.exchangeVirus(my_source, my_hand);
+    	   			my_sick = 1;
+    	   	}
             
             /*this is all HIV stuff*/
-            Boolean spread_hiv = VirusFunctions.willInfectHIV(my_hiv_sick, Double.parseDouble(partnerHIV));
-            Boolean contract_hiv = VirusFunctions.willContractHIV(my_hiv_sick, Double.parseDouble(partnerHIV));
+            Boolean spread_hiv = VirusFunctions.willInfect(my_hiv_sick, Double.parseDouble(partnerHIV));
+            Boolean contract_hiv = VirusFunctions.willContract(my_hiv_sick, Double.parseDouble(partnerHIV));
             Integer infectHIVInt = spread_hiv.hashCode();
             Integer contractHIVInt = contract_hiv.hashCode();	                    
             infectHIVInt= VirusFunctions.changeMe(infectHIVInt);
             contractHIVInt=VirusFunctions.changeMe(contractHIVInt);
             
-            if(contract_hiv){    
-            	my_hiv_sick = VirusFunctions.exchangeHIV(my_hiv_sick,Double.parseDouble(partnerHIV));
+            if(contract_hiv | spread_hiv){    
+            	my_hiv_sick = VirusFunctions.exchangeVirus(my_hiv_sick,Double.parseDouble(partnerHIV));
             	my_has_hiv=1;
             }
-            if(spread_hiv){
-            	my_hiv_sick = VirusFunctions.exchangeHIV(my_hiv_sick,Double.parseDouble(partnerHIV));
-            }
+
             //write this shit into the relationship database
             relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt, infectHIVInt, contractHIVInt);
             

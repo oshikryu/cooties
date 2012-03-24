@@ -103,16 +103,6 @@ public class CootiesActivity extends Activity {
 		   return (Double)source_sick;
 	   }
 	   
-	   //initialize HIV specific sickness
-	   public Double determineHIV(Integer sick){
-		   Double source_sick=(double) 0;
-		   Random generator = new Random();
-		   Double num = (double) generator.nextInt(100);
-		   if(sick.equals(1)){
-			   source_sick=num;
-		   } 
-		   return (Double)source_sick;
-	   }
 	   
 	   //initialize HIV sickness boolean
 	   public static int determineHIV(){
@@ -120,10 +110,10 @@ public class CootiesActivity extends Activity {
 		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
 		   if(num.equals(0)){
 			   //switch these values for testing
-			   return 1;
+			   return 0;
 		   }
 		   else{
-			   return 0;
+			   return 1;
 		   }
 	   }
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
@@ -137,7 +127,7 @@ public class CootiesActivity extends Activity {
 			  if((first_name.length() == 0) | (last_name.length() == 0)) {
 				  AlertDialog alertDialog = new AlertDialog.Builder(CootiesActivity.this).create();
 				  alertDialog.setTitle("Empty fields");
-				  alertDialog.setMessage("You need to enter a first and last name");
+				  alertDialog.setMessage("You need to enter a first and last name.");
 				  alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
 					  public void onClick(DialogInterface dialog, int which) {
 						  
@@ -156,7 +146,7 @@ public class CootiesActivity extends Activity {
 			  Integer hiv_sickness=determineHIV();
 			  Double hiv_sick=0.0;
 			  if(hiv_sickness.equals(1)){
-				  hiv_sick=determineHIV(hiv_sickness);
+				  hiv_sick=determineSource(hiv_sickness);
 			  }
 			  time=determineSickTime(sickness);
 			  mySQLiteAdapter.insert(first_name, last_name, sickness, hiv_sickness, hiv_sick, hand_sick, time, source_sick, time);
