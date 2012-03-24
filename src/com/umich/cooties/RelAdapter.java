@@ -32,6 +32,8 @@ public class RelAdapter {
 	 public static String SPREAD = "spread";
 	 public static String CONTRACT = "contract";
 	 public static String ROUND="_id";
+	 public static String SPREAD_HIV="spread_hiv";
+	 public static String CONTRACT_HIV="contract_hiv";
 
 	 
 	 //create table RELATIONSHIP
@@ -42,7 +44,8 @@ public class RelAdapter {
 			 + ROUND + " integer primary key autoincrement, " +
 			 ID_ME + " INTEGER, "+ PARTNER_FIRST + " text not null,"
 			 + PARTNER_LAST + " text not null," + SPREAD +" integer, " +
-			 CONTRACT+ " integer);";
+			 CONTRACT+ " integer," + SPREAD_HIV +" integer, " +
+					 CONTRACT_HIV + " integer);";
 	 
 	 //for relationship helper and database;
 	 
@@ -80,14 +83,15 @@ public class RelAdapter {
 	}
 	 
 	 //insert into relationship table
-	 public long insert(Integer id_me, String partner_first, String partner_last, Integer spread, Integer contract){
+	 public long insert(Integer id_me, String partner_first, String partner_last, Integer spread, Integer contract, Integer spread_hiv, Integer contract_hiv){
 		  ContentValues contentValues = new ContentValues();
 		  contentValues.put(ID_ME, id_me);
 		  contentValues.put(PARTNER_FIRST, partner_first);
 		  contentValues.put(PARTNER_LAST, partner_last);
 		  contentValues.put(SPREAD, spread);
 		  contentValues.put(CONTRACT, contract);
-		  
+		  contentValues.put(SPREAD_HIV, spread_hiv);
+		  contentValues.put(CONTRACT_HIV, contract_hiv);
 		 return relrelsqLiteDatabase.insert(REL_TABLE,null, contentValues);
 	 }
 	
@@ -100,7 +104,7 @@ public class RelAdapter {
 	 
 	
 	 public Cursor queueAll(){
-	  String[] columns = new String[]{ROUND, ID_ME, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT};
+	  String[] columns = new String[]{ROUND, ID_ME, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
 	  Cursor cursor = relrelsqLiteDatabase.query(REL_TABLE, columns,
 	    null, null, null, null, null);
 	  return cursor;

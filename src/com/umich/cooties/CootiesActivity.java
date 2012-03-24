@@ -5,11 +5,16 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -39,6 +44,7 @@ public class CootiesActivity extends Activity {
 	   public void onCreate(Bundle savedInstanceState) {
 	       super.onCreate(savedInstanceState);
 	       setUpForm();
+	       
 	   }
 	   
 	   public void setUpForm() {
@@ -49,32 +55,51 @@ public class CootiesActivity extends Activity {
 	       mySQLiteAdapter = new UserAdapter(this);
 	       mySQLiteAdapter.openToWrite();
 	       cursor = mySQLiteAdapter.queueAll();
-	       buttonAdd.setOnClickListener(buttonAddOnClickListener);
-	       
+	       buttonAdd.setOnClickListener(buttonAddOnClickListener);	       
+	   }
+	   
+	   @Override
+	   public boolean onCreateOptionsMenu(Menu menu) {
+	       MenuInflater inflater = getMenuInflater();
+	       inflater.inflate(R.menu.menu, menu);
+	       return true;
+	   }
+	   
+	   @Override
+	   public boolean onOptionsItemSelected(MenuItem item) {
+	       switch (item.getItemId()) {
+	           case R.id.home:     Toast.makeText(this, "You pressed home!", Toast.LENGTH_LONG).show();
+	                               break;
+	           case R.id.havemet:     Toast.makeText(this, "You pressed havemet!", Toast.LENGTH_LONG).show();
+	                               break;
+	           case R.id.exit: Toast.makeText(this, "You pressed  exit!", Toast.LENGTH_LONG).show();
+	                               break;
+	       }
+	       return true;
 	   }
 	   
 	   //initialize user sickness boolean
 	   public static int determineSick(){
 		   Random generator = new Random();
-		   Integer num = generator.nextInt(6);
+		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
 		   if(num.equals(0)){
 			   //switch these values for testing
 			   return 1;
 		   }
 		   else{
-			   return 0 /*+ num.toString()*/;
+			   return 0;
 		   }
 	   }
 	   
 	   //initialize user hand sickness
-	   public  int determineHand(Integer sick){
-		   Integer hand_sick=0;
+	   public Double determineHand(Integer sick){
+		   Double hand_sick=(double) 0;
 		   Random generator = new Random();
-		   Integer num = generator.nextInt(100);
+		   Double num = (double) generator.nextInt(100);
 		   if(sick.equals(1)){
 			   hand_sick=num;
 		   } 
-		   return hand_sick;
+		   return (Double)hand_sick;
 	   }   
 	   
 	   //initialize and SYNCHRONIZE hand_sick and nose_sick time
@@ -87,30 +112,74 @@ public class CootiesActivity extends Activity {
 	   }
 	   
 	   
-	   //initialize user nose sickness
-	   public  int determineNose(Integer sick){
-		   Integer nose_sick=0;
+	   //initialize user source sickness
+	   public Double determineSource(Integer sick){
+		   Double source_sick=(double) 0;
 		   Random generator = new Random();
-		   Integer num = generator.nextInt(100);
+		   Double num = (double) generator.nextInt(100);
 		   if(sick.equals(1)){
-			   nose_sick=num;
+			   source_sick=num;
 		   } 
-		   return nose_sick;
+		   return (Double)source_sick;
 	   }
-
-
 	   
+	   //initialize HIV specific sickness
+	   public Double determineHIV(Integer sick){
+		   Double source_sick=(double) 0;
+		   Random generator = new Random();
+		   Double num = (double) generator.nextInt(100);
+		   if(sick.equals(1)){
+			   source_sick=num;
+		   } 
+		   return (Double)source_sick;
+	   }
+	   
+	   //initialize HIV sickness boolean
+	   public static int determineHIV(){
+		   Random generator = new Random();
+		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
+		   if(num.equals(0)){
+			   //switch these values for testing
+			   return 1;
+		   }
+		   else{
+			   return 0;
+		   }
+	   }
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
 
 		  public void onClick(View arg0) {
-			  // TODO Auto-generated method stub
+			  //initialize all of the sickness settings for the user
 			  String first_name = inputContent1.getText().toString();
 			  String last_name = inputContent2.getText().toString();
+			  
+			  //check for empty text fields
+			  if((first_name.length() == 0) | (last_name.length() == 0)) {
+				  AlertDialog alertDialog = new AlertDialog.Builder(CootiesActivity.this).create();
+				  alertDialog.setTitle("Empty fields");
+				  alertDialog.setMessage("You need to enter a first and last name");
+				  alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+					  public void onClick(DialogInterface dialog, int which) {
+						  
+				  }});
+				  alertDialog.show();
+				  return;
+			  }
+
 			  Integer sickness = determineSick();
-			  Integer hand_sick=determineHand(sickness);
-			  Integer nose_sick=determineNose(sickness);
+			  Double hand_sick=0.0;
+			  Double source_sick=0.0;
+			  if(sickness.equals(1)){
+				  hand_sick=determineHand(sickness);
+				  source_sick=determineSource(sickness);
+			  }
+			  Integer hiv_sickness=determineHIV();
+			  Double hiv_sick=0.0;
+			  if(hiv_sickness.equals(1)){
+				  hiv_sick=determineHIV(hiv_sickness);
+			  }
 			  time=determineSickTime(sickness);
-			  mySQLiteAdapter.insert(first_name, last_name, sickness,hand_sick, time, nose_sick, time);
+			  mySQLiteAdapter.insert(first_name, last_name, sickness, hiv_sickness, hiv_sick, hand_sick, time, source_sick, time);
 			  setContentView(R.layout.gofind);
 			  buttonMeet=(Button)findViewById(R.id.meeting);
 			  buttonMeet.setOnClickListener(buttonMeetOnClickListener);

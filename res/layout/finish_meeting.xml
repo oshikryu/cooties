@@ -12,6 +12,34 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/page7" />
 
+    <TextView
+        android:id="@+id/owner_speak"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="30dp"
+        android:text="Cooties passed from me to:"
+        android:textColor="@color/black"
+      />
+    
+     <TextView
+        android:id="@+id/infector_speak"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="415dp"
+        android:text="I gave cooties to:"
+        android:textColor="@color/black"
+      />
+      <TextView
+        android:id="@+id/contractor_speak"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="415dp"
+        android:text="I got cooties from:"
+        android:textColor="@color/black"
+     /> "
     <Button
         android:id="@+id/meetdone"
         style="@android:style/Animation"

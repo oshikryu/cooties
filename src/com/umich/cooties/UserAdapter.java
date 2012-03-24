@@ -20,10 +20,12 @@ public class UserAdapter extends Activity {
 	public static final String FIRST_NAME = "first";
 	public static final String LAST_NAME = "last";
 	public static final String SICK = "sickness";
+	public static final String HAS_HIV = "has_hiv";
+	public static final String HIV_SICK = "hiv_sick";
 	public static final String HAND_SICK="Hand_Sick";
-	public static final String NOSE_SICK="Nose_Sick";
+	public static final String SOURCE_SICK="Source_Sick";
 	public static final String HAND_SICK_TIME="Hand_Sick_Time";
-	public static final String NOSE_SICK_TIME="Nose_Sick_Time";
+	public static final String SOURCE_SICK_TIME="Nose_Sick_Time";
 	
 
 
@@ -35,10 +37,12 @@ public class UserAdapter extends Activity {
 	+ FIRST_NAME + " text not null, "
 	+ LAST_NAME + " text not null, "
 	+ SICK + " integer NOT NULL, "
-	+ HAND_SICK + " integer NOT NULL, "
+	+ HAS_HIV + " integer NOT NULL, "
+	+ HIV_SICK + " REAL NOT NULL, "
+	+ HAND_SICK + " REAL NOT NULL, "
 	+ HAND_SICK_TIME + " integer NOT NULL, "
-	+ NOSE_SICK + " integer NOT NULL, "
-	+ NOSE_SICK_TIME + " integer NOT NULL);";
+	+ SOURCE_SICK + " REAL NOT NULL, "
+	+ SOURCE_SICK_TIME + " integer NOT NULL);";
 
 
 	protected static SQLiteHelper sqLiteHelper;
@@ -97,28 +101,32 @@ public class UserAdapter extends Activity {
 	    new String []{String.valueOf(item_id)});   
 	}
 */
-	public long insert(String first, String last, int sick, int hand_sick, int hand_sick_time,
-			int nose_sick, int nose_sick_time){
+	public long insert(String first, String last, int sick, int has_hiv, double hiv_sick, double hand_sick, int hand_sick_time,
+			double source_sick, int nose_sick_time){
 
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(FIRST_NAME, first);
 		contentValues.put(LAST_NAME, last);
 		contentValues.put(SICK, sick);
+		contentValues.put(HAS_HIV, has_hiv);
+		contentValues.put(HIV_SICK, hiv_sick);
 		contentValues.put(HAND_SICK, hand_sick);
 		contentValues.put(HAND_SICK_TIME, hand_sick_time);
-		contentValues.put(NOSE_SICK, nose_sick);
-		contentValues.put(NOSE_SICK_TIME, nose_sick_time);
+		contentValues.put(SOURCE_SICK, source_sick);
+		contentValues.put(SOURCE_SICK_TIME, nose_sick_time);
 		return sqLiteDatabase.insert(USER_TABLE, null, contentValues);
 	}
 
-	public int update(int id,int sick, int hand_sick, int hand_sick_time,
-			int nose_sick, int nose_sick_time){
+	public int update(int id,int sick, int has_hiv, double hiv_sick, double hand_sick, int hand_sick_time,
+			double source_sick, int source_sick_time){
 		    ContentValues cv=new ContentValues();
 		    cv.put(SICK, sick);
+			cv.put(HAS_HIV, has_hiv);
+			cv.put(HIV_SICK, hiv_sick);
 		    cv.put(HAND_SICK, hand_sick);
-		    cv.put(NOSE_SICK, nose_sick);
+		    cv.put(SOURCE_SICK, source_sick);
 		    cv.put(HAND_SICK_TIME, hand_sick_time);
-		    cv.put(NOSE_SICK_TIME, nose_sick_time);
+		    cv.put(SOURCE_SICK_TIME, source_sick_time);
 		    return sqLiteDatabase.update(USER_TABLE, cv, KEY_ID+"="+id, 
 		    		null);   
 	  }
@@ -129,7 +137,7 @@ public class UserAdapter extends Activity {
 	}
 
 	public Cursor queueAll(){
-		String[] columns = new String[]{KEY_ID, FIRST_NAME, LAST_NAME, SICK, HAND_SICK, HAND_SICK_TIME, NOSE_SICK, NOSE_SICK_TIME};
+		String[] columns = new String[]{KEY_ID, FIRST_NAME, LAST_NAME, SICK, HAS_HIV, HIV_SICK, HAND_SICK, HAND_SICK_TIME, SOURCE_SICK, SOURCE_SICK_TIME};
 		Cursor cursor = sqLiteDatabase.query(USER_TABLE, columns,
 		null, null, null, null, null);
 		return cursor;

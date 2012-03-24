@@ -56,15 +56,23 @@ public class Meeting extends Activity{
     static protected String my_last=null;
     static protected int my_sick=0;
     static protected int my_id=0;
-    static protected int my_hand=0;
-    static protected int my_nose=0;
+    static protected double my_hand=0;
+    static protected double my_source=0;
+    static protected double my_hiv_sick=0;
+    static protected int my_has_hiv=0;
     
+    //this number is between 0 and 1 and will be
+    //used for determining probabilistic infection
+    static protected Double my_probability = 0.0;
+   	public static Double sharedProbability = 0.0;
+   	
     static protected SimpleCursorAdapter relCursorAdapter;
 	static protected Cursor relCursor;
 
 	AnimationDrawable animation;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.meeting);
 		Button back=(Button) findViewById(R.id.back);
 		back.setOnClickListener(new View.OnClickListener(){
@@ -76,29 +84,18 @@ public class Meeting extends Activity{
 		});
 		//this adds animation to the meeting screen
 		 animation = new AnimationDrawable();
-	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting1), 500);
-	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting2), 500);
-	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting3), 500);
-	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting4), 500);
-	        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting5), 500);
-	        animation.setOneShot(false);
-	        
-	        ImageView imageAnim =  (ImageView) findViewById(R.id.anim);
-	        imageAnim.setBackgroundDrawable(animation);
-	        
-	        // run the start() method later on the UI thread
-	        imageAnim.post(new Starter());
-
-		/*
-		Button next=(Button) findViewById(R.id.meetdone);
-		next.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View view){
-				Intent intent = new Intent(Meeting.this,FinishMeeting.class);
-				Meeting.this.startActivity(intent);
-			}
-		});
-		
-		*/
+        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting1), 500);
+        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting2), 500);
+        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting3), 500);
+        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting4), 500);
+        animation.addFrame(getResources().getDrawable(R.drawable.page4_meeting5), 500);
+        animation.setOneShot(false);
+        
+        ImageView imageAnim =  (ImageView) findViewById(R.id.anim);
+        imageAnim.setBackgroundDrawable(animation);
+        
+        // run the start() method later on the UI thread
+        imageAnim.post(new Starter());
 		
 		//rel db and cursor initialization
 		relAdapter = new RelAdapter(this);
@@ -114,15 +111,22 @@ public class Meeting extends Activity{
 		Cursor c = CootiesActivity.mySQLiteAdapter.queueAll();
 		c.moveToLast();
 		my_id = c.getInt(c.getColumnIndex(UserAdapter.KEY_ID));
-		 my_first = c.getString(c.getColumnIndex(UserAdapter.FIRST_NAME));
-		 my_last = c.getString(c.getColumnIndex(UserAdapter.LAST_NAME));
-		 my_sick = c.getInt(c.getColumnIndex(UserAdapter.SICK));
-		 my_hand = c.getInt(c.getColumnIndexOrThrow(UserAdapter.HAND_SICK));
-		 my_nose = c.getInt(c.getColumnIndexOrThrow(UserAdapter.NOSE_SICK));
-		 //the variable item will be packaged as an NFC datatype
-		 item = String.valueOf(my_id) + " " + my_first +" " + my_last + " "+ String.valueOf(my_sick) + 
-		 " " + String.valueOf(my_hand) + " "+ String.valueOf(my_nose);
-//      	toast(item);//debugging purposes
+		my_first = c.getString(c.getColumnIndex(UserAdapter.FIRST_NAME));
+		my_last = c.getString(c.getColumnIndex(UserAdapter.LAST_NAME));
+		my_sick = c.getInt(c.getColumnIndex(UserAdapter.SICK));
+		my_hiv_sick = c.getDouble(c.getColumnIndexOrThrow(UserAdapter.HIV_SICK));
+		my_has_hiv = c.getInt(c.getColumnIndexOrThrow(UserAdapter.HAS_HIV));
+		my_hand = c.getDouble(c.getColumnIndexOrThrow(UserAdapter.HAND_SICK));
+		my_source = c.getDouble(c.getColumnIndexOrThrow(UserAdapter.SOURCE_SICK));
+		
+	   	Random generator = new Random();
+	   	my_probability = generator.nextDouble();
+		
+		//the string item will be packaged as an NFC datatype
+		item = String.valueOf(my_id) + " " + my_first +" " + my_last + " "+ String.valueOf(my_sick) + 
+		" " + String.valueOf(my_hand) + " "+ String.valueOf(my_source) + " "+ String.valueOf(my_has_hiv)+  
+		" "+ String.valueOf(my_hiv_sick) + " " + my_probability;
+      	toast(item);//debugging purposes
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         // Handle all of our received NFC intents in this activity.
@@ -139,7 +143,6 @@ public class Meeting extends Activity{
         // Intent filters for writing to a tag
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         mWriteTagFilters = new IntentFilter[] { tagDetected };
-
 	}
 	
 	//for animation purposes
@@ -154,7 +157,6 @@ public class Meeting extends Activity{
 		    Cursor mCursor = UserAdapter.sqLiteDatabase.query(true, UserAdapter.USER_TABLE, new String[] {
 		    				UserAdapter.KEY_ID, UserAdapter.FIRST_NAME, UserAdapter.LAST_NAME, UserAdapter.SICK}, UserAdapter.KEY_ID + "=" + ID, null,
 		          null, null, null, null);
-
 		    mCursor.moveToLast();
 		    return mCursor;
 	  }
@@ -203,93 +205,98 @@ public class Meeting extends Activity{
 		      = (AlarmManager)getSystemService(ALARM_SERVICE);
 		    Calendar calendar = Calendar.getInstance();
 		    calendar.setTimeInMillis(System.currentTimeMillis());
-		    calendar.add(Calendar.SECOND, 10);
 		    Random generator = new Random();
-		    Integer num = generator.nextInt(300-120)+120;
-		    num*=1000;//this sets num into milliseconds
+		    Integer num = generator.nextInt(60-30)+30;
+		    calendar.add(Calendar.SECOND, num);
+
+		    num=num*1000;//this sets num into milliseconds
 
 		    alarmManager.setRepeating(AlarmManager.RTC,
 		      calendar.getTimeInMillis(), num, pendingIntent);
 		    finish();
-
 	     }
-	    
-  	   public void touchNose(){
- 		   Random generator = new Random();
- 		   Integer num = generator.nextInt(6);
- 		   if(num.equals(0)){
- 			   //switch these values for testing
- 			   my_nose=VirusFunctions.exchangeVirus(my_hand,my_nose);
- 			   int holder = my_nose;
- 			   my_hand=holder;
- 			   toast("You touched your nose!");
- 		   }
-
- 	   }
-	    
+  
 	    //THIS IS WHERE THE MAGIC HAPPENS!
 	    //this step is where you send the NEW notebody using info from the other phone
 	    //store this information as an ArrayList string!
-	    
 	    private void promptForContent(final NdefMessage msg) {
-//	        new AlertDialog.Builder(this).setTitle("Complete the meeting?")
-//	            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//	                public void onClick(DialogInterface arg0, int arg1) {
-	                	//want to get info from other phone
-	                    body = new String(msg.getRecords()[0].getPayload());
-	                    String[] inputList;
-	                    inputList=body.split(" ");
-	                    //partner info
-	                    String partnerFirst=inputList[1]; // first
-	                    String partnerLast=inputList[2]; //last
-	                    String partnerHand=inputList[4];//hand sick
-//	                    String partnerNose=inputList[5];//nose sick for potential sneezing infection while shaking hands?
-	                    toast("You are meeting: "+ partnerFirst + " " + partnerLast );//shows who you're meeting
-	                    
-	                    //check sickness functions	                    
-	                    Boolean infect = VirusFunctions.willInfect(my_hand,Integer.parseInt(partnerHand));
-	                    Boolean contract = VirusFunctions.willContract(my_hand, Integer.parseInt(partnerHand));
-	                    
-	                    //inoculation or random nose touching
-	                    touchNose();
-	                    
-	            	    //decay
-	                    my_hand=VirusFunctions.virusDecay(my_hand);
-	                                        
-	                    //virus data exchange
-	                    my_hand = VirusFunctions.exchangeVirus(my_hand,Integer.parseInt(partnerHand));
-	                    if(infect | contract){                    	
-	                    	my_sick=1;
-	                    }
-	                    
-	                    
-	                    Integer infectInt = infect.hashCode();
-	                    Integer contractInt = contract.hashCode();
-	                    
-	                    infectInt= VirusFunctions.changeMe(infectInt);
-	                    contractInt=VirusFunctions.changeMe(contractInt);
-	                    //write this shit into the relationship database
-	                    relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt);
-	                    
-	                    CootiesActivity.mySQLiteAdapter.openToWrite();
+        	//want to get info from other phone
+            body = new String(msg.getRecords()[0].getPayload());
+            String[] inputList;
+            inputList=body.split(" ");
+            //partner info
+            String partnerFirst=inputList[1]; // first
+            String partnerLast=inputList[2]; //last
+            String partnerHIV=inputList[5];//hiv sick
+            String partnerHand=inputList[6];//hand sick
+            String partnerSource=inputList[7];//source sick
+            String partnerProb=inputList[8];//shared probability
 
-	                    //updating user with updated sickness? this is probably super bad
-	                    CootiesActivity.mySQLiteAdapter.update(my_id, my_sick, my_hand, CootiesActivity.time++, my_nose, CootiesActivity.time++);
-	                    
+            toast("You are meeting: "+ partnerFirst + " " + partnerLast + " " + partnerHIV + " " + partnerHand + " " 
+            		+ partnerSource);//shows who you're meeting
+            
+            //determining which phone's probability to use
+            if(my_sick>Double.parseDouble(partnerHand)){
+            	sharedProbability = my_probability;
+            }
+            if(my_sick<=Double.parseDouble(partnerHand)){
+            	sharedProbability = Double.parseDouble(partnerProb);
+            }
+            /* this is all gastro stuff*/
+            //check sickness functions	                    
+            Boolean infect = VirusFunctions.willInfect(my_hand,Double.parseDouble(partnerHand));
+            Boolean contract = VirusFunctions.willContract(my_hand, Double.parseDouble(partnerHand));	                    
+            Integer infectInt = infect.hashCode();
+            Integer contractInt = contract.hashCode();	                    
+            infectInt= VirusFunctions.changeMe(infectInt);
+            contractInt=VirusFunctions.changeMe(contractInt);
+            
+    	    //decay
+            my_hand = VirusFunctions.virusDecay(my_hand);
+            
+            //shedding
+        	double shedding = my_source/10;
+            my_hand += shedding;
+                                
+            //contract
+            if(contract){ 
+            	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
+            	my_sick=1;
+            }
+            if(infect){
+            	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
+            }
+            
+            /*this is all HIV stuff*/
+            Boolean spread_hiv = VirusFunctions.willInfectHIV(my_hiv_sick, Double.parseDouble(partnerHIV));
+            Boolean contract_hiv = VirusFunctions.willContractHIV(my_hiv_sick, Double.parseDouble(partnerHIV));
+            Integer infectHIVInt = spread_hiv.hashCode();
+            Integer contractHIVInt = contract_hiv.hashCode();	                    
+            infectHIVInt= VirusFunctions.changeMe(infectHIVInt);
+            contractHIVInt=VirusFunctions.changeMe(contractHIVInt);
+            
+            if(contract_hiv){    
+            	my_hiv_sick = VirusFunctions.exchangeHIV(my_hiv_sick,Double.parseDouble(partnerHIV));
+            	my_has_hiv=1;
+            }
+            if(spread_hiv){
+            	my_hiv_sick = VirusFunctions.exchangeHIV(my_hiv_sick,Double.parseDouble(partnerHIV));
+            }
+            //write this shit into the relationship database
+            relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt, infectHIVInt, contractHIVInt);
+            
+            CootiesActivity.mySQLiteAdapter.openToWrite();
 
-	             	   Intent intent = new Intent(Meeting.this,HaveMet.class);
-	           		   Meeting.this.startActivity(intent);
-//	                }
-//	            })
-//	            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//	                public void onClick(DialogInterface arg0, int arg1) {
-//	                    
-//	                }
-//	            }).show();
+            //updating user with updated sickness? this is probably super bad
+            CootiesActivity.mySQLiteAdapter.update(my_id, my_sick, my_has_hiv, my_hiv_sick, my_hand, CootiesActivity.time++, my_source, CootiesActivity.time++);
+            
+
+     	   Intent intent = new Intent(Meeting.this,HaveMet.class);
+   		   Meeting.this.startActivity(intent);
 	    }
 	    
-	//This changes the string within the note
-	//into a Ndef sendable file
+	    //This changes the string within the note
+	    //into a Ndef sendable file
 	    private NdefMessage getNoteAsNdef() {
 	    	//changed to access the static string item;
 	        byte[] textBytes = item.getBytes();
@@ -299,7 +306,7 @@ public class Meeting extends Activity{
 	            textRecord
 	        });
 	    }
-	//get ndef messages
+	    //get ndef messages
 	    NdefMessage[] getNdefMessages(Intent intent) {
 	        // Parse the intent
 	        NdefMessage[] msgs = null;
@@ -329,19 +336,19 @@ public class Meeting extends Activity{
 	        }
 	        return msgs;
 	    }
-	//turn on ndef exchange after writing
+	    //turn on ndef exchange after writing
 	    //called from prompt for content
 	    //leads to get note from ndef
 	    private void enableNdefExchangeMode() {
 	        mNfcAdapter.enableForegroundNdefPush(Meeting.this, getNoteAsNdef());
 	        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mNdefExchangeFilters, null);
 	    }
-	//turn off ndef exchange before writing
+	    //turn off ndef exchange before writing
 	    private void disableNdefExchangeMode() {
 	        mNfcAdapter.disableForegroundNdefPush(this);
 	        mNfcAdapter.disableForegroundDispatch(this);
 	    }
-	//turn on tag writing after ndef exchange off
+	    //turn on tag writing after ndef exchange off
 	    private void enableTagWriteMode() {
 	        mWriteMode = true;
 	        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
@@ -350,7 +357,7 @@ public class Meeting extends Activity{
 	        };
 	        mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
 	    }
-	//turn off tag writing before ndef exchange turned on
+	    //turn off tag writing before ndef exchange turned on
 	    private void disableTagWriteMode() {
 	        mWriteMode = false;
 	        mNfcAdapter.disableForegroundDispatch(this);

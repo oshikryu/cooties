@@ -40,8 +40,8 @@ public class VirusFunctions extends Activity {
 	public static int timeMin=60;
 	
 	//generate a virus amount to add
-	public static int increaseVirus(int infector){
-		if(infector==0){
+	public static double increaseVirus(Integer infector){
+		if(infector.equals(0)){
 		    Random generator = new Random();
 		    Integer num = generator.nextInt(10);
 		    return infector+num;
@@ -52,16 +52,14 @@ public class VirusFunctions extends Activity {
     }
    
     //generate a virus decrease via time decay (hand only!! for now) 
-	public static int virusDecay(int infectee){
+	public static double virusDecay(Double infectee){
 		/*virus inactivation will be static until
 		 * able to model proper first order decay
 		 */
-		if(infectee==0){
+		if(infectee.equals(0)){
 			return 0;
 		}
-	    Random generator = new Random();
-	    Integer num = generator.nextInt(infectee);
-		int decreaseAmount = infectee%10;//this is based on 1% of the total infection percentage
+		Double decreaseAmount = infectee/100;//this is based on 1% of influenza decay per minute 
 		if((infectee-decreaseAmount)>0){
 			return infectee-decreaseAmount;
 		}
@@ -69,26 +67,32 @@ public class VirusFunctions extends Activity {
 	}
        
     //wash hands
-    public static int wash(int handvirus){
-    	int afterwash=0;
+    public static double wash(double handvirus){
+    	double afterwash=0;
     	afterwash=handvirus/2;//reduce infection concentration by 50%
     	return afterwash;
     }
     
-    //determine if you will infect partner
-    public static boolean willInfect(int my_sick, int partner_sick){
+    //determine if you will contract from your partner
+    public static boolean willContract(double my_sick, double partner_sick){
     	boolean result=false;
-    	if(my_sick>partner_sick){
-    		result=true;
+    	if(partner_sick>my_sick ){
+    		double partner_prob=partner_sick/100;
+ 		   	if(partner_prob>Meeting.sharedProbability){
+ 		   		return true;
+ 		   	}
     	}
     	return result;
     }
     
-    //determine if partner will infect you
-    public static boolean willContract(int my_sick, int partner_sick){
+    //determine if you will infect your partner
+    public static boolean willInfect(double my_sick, double partner_sick){
     	boolean result=false;
-    	if(partner_sick>my_sick){
-    		result=true;
+    	if(my_sick>partner_sick){
+    		double my_prob=my_sick/100;
+ 		   	if(my_prob>Meeting.sharedProbability){
+ 		   		return true;
+ 		   	}
     	}
     	return result;
     }
@@ -100,16 +104,65 @@ public class VirusFunctions extends Activity {
     	}
     	else{
     		return code = 0;
-    		
     	}
     }
     
-    //actual hand_sick exchange
-    public static int exchangeVirus(int my_hand, int partner_hand){
-    	int totalVirus=my_hand+partner_hand;
-		return totalVirus/2;//splits the total virus amount and equally distributes it
-    	
+    /*
+    *actual hand_sick pathogen exchange
+    *this function calculates the amount of pathogen exchanged
+    *using a transfer efficiency of 10% 
+    */
+    public static double exchangeVirus(double my_hand, double partner_hand){
+    	double my_prob=my_hand/10;
+    	double partner_prob=partner_hand/10;
+    	if(willInfect(my_hand, partner_hand)){//if you have more pathogen than your partner
+    		my_hand-=(my_prob-partner_prob);
+    	}
+    	if(willContract(my_hand,partner_hand)){//if you have less pathogen than your partner
+    		my_hand+=(partner_prob-my_prob);
+    	}
+		return my_hand;//splits the total virus amount and equally distributes it
     }
     
-
+    /* HIV functions*/
+    
+    //determine if you will infect partner with HIV
+    public static boolean willInfectHIV(double my_hiv_sick, double partner_hiv_sick){
+    	boolean result=false;
+    	if(my_hiv_sick>partner_hiv_sick){
+    		double my_hiv_prob = my_hiv_sick/100;
+ 		   	if(my_hiv_prob>Meeting.sharedProbability){
+ 		   		return true;
+ 		   	}
+    	}
+    	return result;
+    }
+    
+    //determine if you will contract HIV from your partner
+    public static boolean willContractHIV(double my_hiv_sick, double partner_hiv_sick){
+    	boolean result=false;
+    	if(partner_hiv_sick>my_hiv_sick){
+    		double partner_hiv_prob=partner_hiv_sick/100;
+ 		   	if(partner_hiv_prob>Meeting.sharedProbability){
+ 		   		return true;
+ 		   	}
+    	}
+    	return result;
+    }
+    
+    public static double exchangeHIV(double my_hiv_sick, double partner_hiv_sick){
+    	double my_prob = my_hiv_sick/10;
+    	double partner_prob = partner_hiv_sick/10;
+   	
+    	
+    	if(willInfectHIV(my_hiv_sick, partner_hiv_sick)){//if you have more pathogen than your partner
+    		my_hiv_sick-=(my_prob-partner_prob);
+    	}
+    	if(willContractHIV(my_hiv_sick,partner_hiv_sick)){//if you have less pathogen than your partner
+    		my_hiv_sick+=(partner_prob-my_prob);
+    	}
+		return my_hiv_sick;
+    }
+    
+    
 }
