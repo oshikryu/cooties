@@ -40,9 +40,9 @@ public class UserAdapter extends Activity {
 	+ HAS_HIV + " integer NOT NULL, "
 	+ HIV_SICK + " REAL NOT NULL, "
 	+ HAND_SICK + " REAL NOT NULL, "
-	+ HAND_SICK_TIME + " integer NOT NULL, "
+	+ HAND_SICK_TIME + " real NOT NULL, "
 	+ SOURCE_SICK + " REAL NOT NULL, "
-	+ SOURCE_SICK_TIME + " integer NOT NULL);";
+	+ SOURCE_SICK_TIME + " real NOT NULL);";
 
 
 	protected static SQLiteHelper sqLiteHelper;
@@ -101,8 +101,8 @@ public class UserAdapter extends Activity {
 	    new String []{String.valueOf(item_id)});   
 	}
 */
-	public long insert(String first, String last, int sick, int has_hiv, double hiv_sick, double hand_sick, int hand_sick_time,
-			double source_sick, int nose_sick_time){
+	public long insert(String first, String last, int sick, int has_hiv, double hiv_sick, double hand_sick, long hand_sick_time,
+			double source_sick, long nose_sick_time){
 
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(FIRST_NAME, first);
@@ -117,8 +117,8 @@ public class UserAdapter extends Activity {
 		return sqLiteDatabase.insert(USER_TABLE, null, contentValues);
 	}
 
-	public int update(int id,int sick, int has_hiv, double hiv_sick, double hand_sick, int hand_sick_time,
-			double source_sick, int source_sick_time){
+	public int update(int id,int sick, int has_hiv, double hiv_sick, double hand_sick, long hand_sick_time,
+			double source_sick, long source_sick_time){
 		    ContentValues cv=new ContentValues();
 		    cv.put(SICK, sick);
 			cv.put(HAS_HIV, has_hiv);

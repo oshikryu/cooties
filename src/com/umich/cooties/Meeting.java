@@ -1,6 +1,7 @@
 package com.umich.cooties;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -28,6 +29,7 @@ import android.os.Parcelable;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,15 +53,16 @@ public class Meeting extends Activity{
     IntentFilter[] mNdefExchangeFilters;
     static protected String item;
     static protected RelAdapter relAdapter;    
-    static protected String body=null;
-    static protected String my_first=null;
-    static protected String my_last=null;
-    static protected int my_sick=0;
-    static protected int my_id=0;
-    static protected double my_hand=0;
-    static protected double my_source=0;
-    static protected double my_hiv_sick=0;
-    static protected int my_has_hiv=0;
+    static protected String body = null;
+    static protected String my_first = null;
+    static protected String my_last = null;
+    static protected int my_sick = 0;
+    static protected int my_id = 0;
+    static protected double my_hand = 0;
+    static protected double my_source = 0;
+    static protected double my_hiv_sick = 0;
+    static protected int my_has_hiv = 0;
+    
     
     //this number is between 0 and 1 and will be
     //used for determining probabilistic infection
@@ -107,6 +110,7 @@ public class Meeting extends Activity{
 		 
 		//query the database
 		//IT WORKS!!!!
+		//package info from database into string
 		CootiesActivity.mySQLiteAdapter.openToRead();
 		Cursor c = CootiesActivity.mySQLiteAdapter.queueAll();
 		c.moveToLast();
@@ -120,8 +124,8 @@ public class Meeting extends Activity{
 		my_source = c.getDouble(c.getColumnIndexOrThrow(UserAdapter.SOURCE_SICK));
 		
 	   	Random generator = new Random();
-	   	my_probability = generator.nextDouble();
-		
+	   	my_probability = generator.nextDouble();	
+	   	
 		//the string item will be packaged as an NFC datatype
 		item = String.valueOf(my_id) + " " + my_first +" " + my_last + " "+ String.valueOf(my_sick) + 
 		" " + String.valueOf(my_hand) + " "+ String.valueOf(my_source) + " "+ String.valueOf(my_has_hiv)+  
@@ -227,7 +231,6 @@ public class Meeting extends Activity{
             //partner info
             String partnerFirst = inputList[1]; // first
             String partnerLast = inputList[2]; //last
-            String partnerIsSick = inputList[3];
             String partnerHand = inputList[4];//hand sick
             String partnerHIV = inputList[7];//hiv sick
             String partnerProb = inputList[8];//shared probability
@@ -244,7 +247,7 @@ public class Meeting extends Activity{
 	            	sharedProbability = Double.parseDouble(partnerProb);
 	            }
             }            
-            toast("You are meeting: "+ partnerFirst + " " + partnerLast + " " + sharedProbability);//shows who you're meeting
+            toast("You are meeting: "+ partnerFirst + " " + partnerLast + " " );//shows who you're meeting
             
             /* this is all gastro stuff*/
             //check sickness functions	          
@@ -256,25 +259,46 @@ public class Meeting extends Activity{
             infectInt = VirusFunctions.changeMe(infectInt);
             contractInt =VirusFunctions.changeMe(contractInt);
             
-    	    //decay
-            my_hand = VirusFunctions.virusDecay(my_hand);
+            //determine timing for pathogens
+    	    long new_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;
+    	    long new_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
             
-            //shedding
-        	double shedding = my_source/10;
-            my_hand += shedding;
-                                
-            if(contract | infect){
-            	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
+            
+            //decay on the hand
+            if((new_hand_time - CootiesActivity.current_hand_time) > 60*1000){
+            	my_hand = VirusFunctions.virusDecay(my_hand);
+                CootiesActivity.current_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;           
             }
-               
+            
+            //shedding every ~276.92 seconds within a range of 15 seconds
+            //this works out to roughly 13 times per hour
+	    	if((new_source_time - CootiesActivity.current_source_time) > 276.92*1000){
+	    		double shedding = my_source/10;
+	    		my_hand += shedding;
+	            CootiesActivity.current_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
+	    	}
+	    	
             //inoculation here. you can only become sick if you inoculate with a sick hand    
     	   	Random generator = new Random();
     	   	Integer inoculation = generator.nextInt(4);
     	   	if(inoculation.equals(2) & (my_source != 0)){
     	   		my_source = VirusFunctions.exchangeVirus(my_source, my_hand);
-    	   			my_sick = 1;
+	   			my_sick = 1;
+	   			CootiesActivity.current_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
+	   			CootiesActivity.current_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;   
     	   	}
-            
+	    	
+	    	//getting well instantly after 1 hour 
+	    	if((new_source_time - CootiesActivity.initial_time) > 3600*1000){
+	    		my_sick = 0;
+	    		my_has_hiv = 0;
+	    		my_source = 0;
+	    	}
+	    	
+            if(contract | infect){
+            	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
+            }
+ 
             /*this is all HIV stuff*/
             Boolean spread_hiv = VirusFunctions.willInfect(my_hiv_sick, Double.parseDouble(partnerHIV));
             Boolean contract_hiv = VirusFunctions.willContract(my_hiv_sick, Double.parseDouble(partnerHIV));
@@ -287,16 +311,16 @@ public class Meeting extends Activity{
             	my_hiv_sick = VirusFunctions.exchangeVirus(my_hiv_sick,Double.parseDouble(partnerHIV));
             	my_has_hiv=1;
             }
-
+            
             //write this shit into the relationship database
             relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt, infectHIVInt, contractHIVInt);
             
             CootiesActivity.mySQLiteAdapter.openToWrite();
-
-            //updating user with updated sickness? this is probably super bad
-            CootiesActivity.mySQLiteAdapter.update(my_id, my_sick, my_has_hiv, my_hiv_sick, my_hand, CootiesActivity.time++, my_source, CootiesActivity.time++);
             
-
+            
+            //updating user with updated sickness? this is probably super bad
+            CootiesActivity.mySQLiteAdapter.update(my_id, my_sick, my_has_hiv, my_hiv_sick, my_hand, CootiesActivity.current_hand_time, my_source, CootiesActivity.current_source_time);
+            
      	   Intent intent = new Intent(Meeting.this,HaveMet.class);
    		   Meeting.this.startActivity(intent);
 	    }

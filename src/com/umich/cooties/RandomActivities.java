@@ -25,7 +25,8 @@ public class RandomActivities extends Activity {
             public void onClick(DialogInterface arg0, int arg1) {
             	double washed_my_hand=VirusFunctions.wash(Meeting.my_hand);
         		CootiesActivity.mySQLiteAdapter.openToRead();
-            	CootiesActivity.mySQLiteAdapter.update(Meeting.my_id, Meeting.my_sick, Meeting.my_has_hiv, Meeting.my_hiv_sick, washed_my_hand, CootiesActivity.time++, Meeting.my_source, CootiesActivity.time++);
+            	CootiesActivity.mySQLiteAdapter.update(Meeting.my_id, Meeting.my_sick, Meeting.my_has_hiv, Meeting.my_hiv_sick, washed_my_hand, 
+            			CootiesActivity.current_hand_time, Meeting.my_source, CootiesActivity.current_source_time);
   			  	Handler myHandler = new Handler();
   			  	myHandler.postDelayed(mMyRunnable, 10*1000);
   			  	

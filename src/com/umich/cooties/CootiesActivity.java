@@ -35,7 +35,9 @@ public class CootiesActivity extends Activity {
      static protected UserAdapter mySQLiteAdapter;
 	 static protected SimpleCursorAdapter cursorAdapter;
 	 static protected Cursor cursor;
-	 public static  Integer time;
+	 static protected long initial_time = 0;
+	 static protected long current_hand_time = 0;
+	 static protected long current_source_time = 0;
 
 	   /** Called when the activity is first created. */
 
@@ -64,10 +66,10 @@ public class CootiesActivity extends Activity {
 		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
 		   if(num.equals(0)){
 			   //switch these values for testing
-			   return 1;
+			   return 0;
 		   }
 		   else{
-			   return 0;
+			   return 1;
 		   }
 	   }
 	   
@@ -81,17 +83,7 @@ public class CootiesActivity extends Activity {
 		   } 
 		   return (Double)hand_sick;
 	   }   
-	   
-	   //initialize and SYNCHRONIZE hand_sick and nose_sick time
-	   public  int determineSickTime(Integer sick){
-		   Integer time=0;
-		   if(sick.equals(1)){
-			   time=1;
-		   }
-		   return time;
-	   }
-	   
-	   
+	   	   
 	   //initialize user source sickness
 	   public Double determineSource(Integer sick){
 		   Double source_sick=(double) 0;
@@ -110,10 +102,10 @@ public class CootiesActivity extends Activity {
 		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
 		   if(num.equals(0)){
 			   //switch these values for testing
-			   return 0;
+			   return 1;
 		   }
 		   else{
-			   return 1;
+			   return 0;
 		   }
 	   }
 	   Button.OnClickListener buttonAddOnClickListener = new Button.OnClickListener(){
@@ -135,21 +127,25 @@ public class CootiesActivity extends Activity {
 				  alertDialog.show();
 				  return;
 			  }
-
+			  //get current time to determine a base time for comparing
+			  //pathogen functions
+			  initial_time = System.currentTimeMillis();
 			  Integer sickness = determineSick();
-			  Double hand_sick=0.0;
-			  Double source_sick=0.0;
+			  Double hand_sick = 0.0;
+			  Double source_sick = 0.0;
 			  if(sickness.equals(1)){
-				  hand_sick=determineHand(sickness);
-				  source_sick=determineSource(sickness);
+				  hand_sick = determineHand(sickness);
+				  source_sick = determineSource(sickness);
+				  current_hand_time = System.currentTimeMillis() - initial_time;
+				  current_source_time = System.currentTimeMillis() - initial_time;
 			  }
-			  Integer hiv_sickness=determineHIV();
+			  Integer hiv_sickness = determineHIV();
 			  Double hiv_sick=0.0;
 			  if(hiv_sickness.equals(1)){
 				  hiv_sick=determineSource(hiv_sickness);
 			  }
-			  time=determineSickTime(sickness);
-			  mySQLiteAdapter.insert(first_name, last_name, sickness, hiv_sickness, hiv_sick, hand_sick, time, source_sick, time);
+			  
+			  mySQLiteAdapter.insert(first_name, last_name, sickness, hiv_sickness, hiv_sick, hand_sick, current_hand_time, source_sick, current_source_time);
 			  setContentView(R.layout.gofind);
 			  buttonMeet=(Button)findViewById(R.id.meeting);
 			  buttonMeet.setOnClickListener(buttonMeetOnClickListener);
