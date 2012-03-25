@@ -270,33 +270,31 @@ public class Meeting extends Activity{
                 CootiesActivity.current_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;           
             }
             
-            //shedding every ~276.92 seconds within a range of 15 seconds
+            //shedding AND inoculation every ~276.92 seconds within a range of 15 seconds
             //this works out to roughly 13 times per hour
+            //10% transfer efficiency of pathogen
 	    	if((new_source_time - CootiesActivity.current_source_time) > 276.92*1000){
 	    		double shedding = my_source/10;
 	    		my_hand += shedding;
-	            CootiesActivity.current_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
+	    		if(my_hand != 0){
+	    			my_source = VirusFunctions.exchangeVirus(my_source, my_hand);
+	   				my_sick = 1;
+	   				CootiesActivity.current_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
+	    		}
+	   			
+	   			CootiesActivity.current_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;   
 	    	}
 	    	
-            //inoculation here. you can only become sick if you inoculate with a sick hand    
-    	   	Random generator = new Random();
-    	   	Integer inoculation = generator.nextInt(4);
-    	   	if(inoculation.equals(2) & (my_source != 0)){
-    	   		my_source = VirusFunctions.exchangeVirus(my_source, my_hand);
-	   			my_sick = 1;
-	   			CootiesActivity.current_source_time = System.currentTimeMillis() - CootiesActivity.initial_time;
-	   			CootiesActivity.current_hand_time = System.currentTimeMillis() - CootiesActivity.initial_time;   
-    	   	}
 	    	
 	    	//getting well instantly after 1 hour 
 	    	if((new_source_time - CootiesActivity.initial_time) > 3600*1000){
 	    		my_sick = 0;
-	    		my_has_hiv = 0;
 	    		my_source = 0;
 	    	}
 	    	
             if(contract | infect){
             	my_hand = VirusFunctions.exchangeVirus(my_hand,Double.parseDouble(partnerHand));
+            	my_sick = 1;
             }
  
             /*this is all HIV stuff*/
@@ -309,7 +307,7 @@ public class Meeting extends Activity{
             
             if(contract_hiv | spread_hiv){    
             	my_hiv_sick = VirusFunctions.exchangeVirus(my_hiv_sick,Double.parseDouble(partnerHIV));
-            	my_has_hiv=1;
+            	my_has_hiv = 1;
             }
             
             //write this shit into the relationship database
