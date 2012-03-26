@@ -60,15 +60,15 @@ public class VirusFunctions extends Activity {
 			return 0;
 		}
 		Double decreaseAmount = infectee/100;//this is based on 1% of influenza decay per minute 
-		if((infectee-decreaseAmount)>0){
-			return infectee-decreaseAmount;
+		if((infectee-decreaseAmount) > 0){
+			return infectee - decreaseAmount;
 		}
 		return infectee;
 	}
        
     //wash hands
     public static double wash(double handvirus){
-    	double afterwash=0;
+    	double afterwash = 0;
     	afterwash=handvirus/2;//reduce infection concentration by 50%
     	return afterwash;
     }
@@ -77,7 +77,7 @@ public class VirusFunctions extends Activity {
     public static boolean willContract(double my_sick, double partner_sick){
     	boolean result=false;
     	if(partner_sick > my_sick ){
-    		double partner_prob=partner_sick/100;
+    		double partner_prob = partner_sick/100;
  		   	if(partner_prob > Meeting.sharedProbability){
  		   		return true;
  		   	}
@@ -87,9 +87,9 @@ public class VirusFunctions extends Activity {
     
     //determine if you will infect your partner
     public static boolean willInfect(double my_sick, double partner_sick){
-    	boolean result=false;
+    	boolean result = false;
     	if(my_sick > partner_sick){
-    		double my_prob=my_sick/100;
+    		double my_prob = my_sick/100;
  		   	if(my_prob > Meeting.sharedProbability){
  		   		return true;
  		   	}
@@ -99,8 +99,8 @@ public class VirusFunctions extends Activity {
     
     //change from bool hash to 1 or 0
     public static int changeMe(int code){
-    	if(code==1231){
-    		return code= 1;
+    	if(code == 1231){
+    		return code = 1;
     	}
     	else{
     		return code = 0;
@@ -113,13 +113,13 @@ public class VirusFunctions extends Activity {
     *using a transfer efficiency of 10% 
     */
     public static double exchangeVirus(double me, double partner){
-    	double my_prob=me/10;
+    	double my_prob = me/10;
     	double partner_prob=partner/10;
     	if(willInfect(me, partner)){//if you have more pathogen than your partner
-    		me-=(my_prob-partner_prob);
+    		me -= (my_prob-partner_prob);
     	}
     	if(willContract(me,partner)){//if you have less pathogen than your partner
-    		me+=(partner_prob-my_prob);
+    		me += (partner_prob-my_prob);
     	}
 		return me;//splits the total virus amount and equally distributes it
     }

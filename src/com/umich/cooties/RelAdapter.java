@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 public class RelAdapter {
 	
 	 protected static RelHelper sqLiteHelper;
-	 protected static  SQLiteDatabase relrelsqLiteDatabase;
+	 protected static  SQLiteDatabase relsqLiteDatabase;
 	 private Context context;	 
 	 
 	 public RelAdapter(Context c){
@@ -52,13 +52,13 @@ public class RelAdapter {
 	 // relationship constructors
 	 public RelAdapter openRelToWrite() throws android.database.SQLException{
 		 sqLiteHelper = new RelHelper(context, REL_DB, null, RELATIONSHIP_VERSION);
-		 relrelsqLiteDatabase = sqLiteHelper.getWritableDatabase();
+		 relsqLiteDatabase = sqLiteHelper.getWritableDatabase();
 		 return this;
 	 }
 
 	 public RelAdapter openRelToRead() throws android.database.SQLException {
 		 sqLiteHelper = new RelHelper(context, REL_DB, null, RELATIONSHIP_VERSION);
-		 relrelsqLiteDatabase = sqLiteHelper.getReadableDatabase();
+		 relsqLiteDatabase = sqLiteHelper.getReadableDatabase();
 		  return this; 
 		 }
  
@@ -70,7 +70,7 @@ public class RelAdapter {
 	 
 	public static int getLast(){
 		int last=0;
-		Cursor cur = relrelsqLiteDatabase.rawQuery("SELECT * FROM " + REL_TABLE, null);
+		Cursor cur = relsqLiteDatabase.rawQuery("SELECT * FROM " + REL_TABLE, null);
 		ArrayList<String> temp = new ArrayList<String>();
 		if (cur != null) {
 		    if (cur.moveToFirst()) {
@@ -92,39 +92,58 @@ public class RelAdapter {
 		  contentValues.put(CONTRACT, contract);
 		  contentValues.put(SPREAD_HIV, spread_hiv);
 		  contentValues.put(CONTRACT_HIV, contract_hiv);
-		 return relrelsqLiteDatabase.insert(REL_TABLE,null, contentValues);
+		 return relsqLiteDatabase.insert(REL_TABLE,null, contentValues);
 	 }
 	
 	 
 	
 	public int deleteAll(){
-		return relrelsqLiteDatabase.delete(REL_TABLE, null, null);
+		return relsqLiteDatabase.delete(REL_TABLE, null, null);
 	 }
 	
 	 
 	
 	 public Cursor queueAll(){
-	  String[] columns = new String[]{ROUND, ID_ME, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
-	  Cursor cursor = relrelsqLiteDatabase.query(REL_TABLE, columns,
-	    null, null, null, null, null);
-	  return cursor;
+		 String[] columns = new String[]{ROUND, ID_ME, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		 Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
+				 null, null, null, null, null);
+		 return cursor;
 	
 	 }
- 
-
-	 public class RelHelper extends SQLiteOpenHelper {
-	
-	  public RelHelper(Context context, String name,
-	  CursorFactory factory, int version) {
-		  super(context, name, factory, version);
-	  }	
-	  @Override
-	  public void onCreate(SQLiteDatabase db) {
-		   // TODO Auto-generated method stub
-		   db.execSQL(CREATE_RELATIONSHIPS);
-	  }	  
-	  @Override
-
+	 
+	 public Cursor queueInfector(){
+		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
+		    SPREAD +" like " + '1', null, null, null, null);
+		return cursor;
+	 }
+	 
+	 public Cursor queueContractFrom(){
+		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
+		    CONTRACT +" like " + '1', null, null, null, null);
+		 return cursor;
+	 }
+	 
+	 public Cursor countTotal(){
+		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		Cursor cursor = relsqLiteDatabase.rawQuery("SELECT DISTINCT partner_last FROM REL_TABLE WHERE" +
+				" SPREAD LIKE '1' ", null);
+		 return cursor;
+	 }
+	 
+	public class RelHelper extends SQLiteOpenHelper {
+		public RelHelper(Context context, String name,
+		CursorFactory factory, int version) {
+		super(context, name, factory, version);
+		}	
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+		db.execSQL(CREATE_RELATIONSHIPS);
+		}	  
+		
+	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	  	// TODO Auto-generated method stub
   		}

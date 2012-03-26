@@ -43,11 +43,20 @@ public class CootiesActivity extends Activity {
 
 	   @Override
 
-	   public void onCreate(Bundle savedInstanceState) {
-	       super.onCreate(savedInstanceState);
-	       setUpForm();
-	       
-	   }
+	  public void onCreate(Bundle savedInstanceState) {
+		    super.onCreate(savedInstanceState);
+			/*
+			 *This code cancels the alarm so it won't bother you 
+			 *once you complete the activity
+			 */
+			Intent intent = new Intent(this, RandomReceiver.class);
+			PendingIntent sender = PendingIntent.getBroadcast(this,
+			               0, intent, 0);
+			AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			alarmManager.cancel(sender);
+				
+	        setUpForm();      
+	  }
 	   
 	   public void setUpForm() {
 		   setContentView(R.layout.main);

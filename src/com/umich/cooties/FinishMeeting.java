@@ -34,12 +34,12 @@ public class FinishMeeting extends Activity{
 		 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.finish_meeting);
-//		TextView tv1=(TextView) findViewById(R.id.owner_speak);
-//		TextView tv2=(TextView) findViewById(R.id.infector_speak);
-//		TextView tv3=(TextView) findViewById(R.id.contractor_speak);
-//		tv1.append(fetchInfector());		
-		Meeting.relAdapter.close();
-		CootiesActivity.mySQLiteAdapter.close();
+		TextView tv1 = (TextView) findViewById(R.id.owner_speak);
+		TextView tv2 = (TextView) findViewById(R.id.infector_speak);
+		TextView tv3 = (TextView) findViewById(R.id.contractor_speak);
+		tv1.append(String.valueOf(fetchTotal()));
+		tv2.append(fetchContractFrom());
+		tv3.append(fetchInfector());
 		Button back=(Button) findViewById(R.id.back);
 		back.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View view){
@@ -63,23 +63,51 @@ public class FinishMeeting extends Activity{
 				FinishMeeting.this.startActivity(intent);
 			}
 		});
+		Meeting.relAdapter.close();
+		CootiesActivity.mySQLiteAdapter.close();
 	}
 
-//    private String fetchInfector(){
-//    	Cursor cLName = null;
-//    	Cursor cFName = null;
-//    	try{
-//		cLName = Meeting.relAdapter.relrelsqLiteDatabase.
-//    			rawQuery("SELECT partner_last FROM rel_table WHERE spread = '1'",null);
-//		cFName = Meeting.relAdapter.relrelsqLiteDatabase.
-//    			rawQuery("SELECT partner_first FROM rel_table WHERE spread = '1'",null);
-//    	}catch(SQLiteException e) {}
-//    	String last = cLName.getString(cLName.getColumnIndex(Meeting.relAdapter.PARTNER_LAST));
-//    	String first = cFName.getString(cFName.getColumnIndex(Meeting.relAdapter.PARTNER_FIRST));
-//    	String name =last + ""+first;
-//    	toast(name);
-//    	return name;   	
-//    }
+    private String fetchInfector(){
+		Meeting.relAdapter.openRelToRead();
+		Cursor relCursor = null;
+    	try{
+    		relCursor = Meeting.relAdapter.queueInfector();
+    		relCursor.moveToFirst();
+    	}
+    	catch(SQLiteException e) { return "FOREVER ALONE";}
+    	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
+    	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
+    	String name = first + " " + last;
+    	toast(name);
+    	return name;   	
+    }
+    
+    private int fetchTotal(){
+		Meeting.relAdapter.openRelToRead();
+		Cursor relCursor = null;
+    	try{
+    		relCursor = Meeting.relAdapter.countTotal();
+    		relCursor.moveToFirst();
+    	}
+    	catch(SQLiteException e) { return 0;}
+    	int total = relCursor.getCount();
+    	return total;   	
+    }
+    
+    private String fetchContractFrom(){
+		Meeting.relAdapter.openRelToRead();
+		Cursor relCursor = null;
+    	try{
+    		relCursor = Meeting.relAdapter.queueContractFrom();
+    		relCursor.moveToFirst();
+    	}
+    	catch(SQLiteException e) { return "FOREVER ALONE";}
+    	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
+    	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
+    	String name = first + " " + last;
+    	return name; 
+    }
+    
     private void toast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
