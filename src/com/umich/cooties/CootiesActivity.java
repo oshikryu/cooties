@@ -75,10 +75,10 @@ public class CootiesActivity extends Activity {
 		   Integer num = generator.nextInt(6);//ADJUST this value to have fewer initial sick users
 		   if(num.equals(0)){
 			   //switch these values for testing
-			   return 0;
+			   return 1;
 		   }
 		   else{
-			   return 1;
+			   return 0;
 		   }
 	   }
 	   

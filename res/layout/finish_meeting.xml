@@ -15,7 +15,7 @@
       <TextView
         android:id="@+id/contractor_speak"
         android:layout_width="140dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginLeft="190dp"
         android:layout_marginTop="415dp"
         android:text="I gave cooties to: "
@@ -50,11 +50,11 @@
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/b_click_home" />
-
+
     <TextView
         android:id="@+id/infector_speak"
         android:layout_width="140dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignBaseline="@+id/contractor_speak"
         android:layout_alignBottom="@+id/contractor_speak"
         android:layout_alignLeft="@+id/home"

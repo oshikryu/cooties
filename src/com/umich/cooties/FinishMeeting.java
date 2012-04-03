@@ -70,41 +70,53 @@ public class FinishMeeting extends Activity{
     private String fetchInfector(){
 		Meeting.relAdapter.openRelToRead();
 		Cursor relCursor = null;
+		String name = "Nobody";
     	try{
     		relCursor = Meeting.relAdapter.queueInfector();
     		relCursor.moveToFirst();
+    		if(relCursor.getCount() == 0){
+    			return name;
+    		}
+        	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
+        	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
+        	name = first + " " + last;
     	}
-    	catch(SQLiteException e) { return "FOREVER ALONE";}
-    	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
-    	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
-    	String name = first + " " + last;
-    	toast(name);
+    	catch(SQLiteException e) { return "Nobody";}
     	return name;   	
     }
     
     private int fetchTotal(){
 		Meeting.relAdapter.openRelToRead();
 		Cursor relCursor = null;
+		int total = 0;
     	try{
     		relCursor = Meeting.relAdapter.countTotal();
+    		if(relCursor.getCount() == 0){
+    			return total;
+    		}
     		relCursor.moveToFirst();
+    		total = relCursor.getCount();
     	}
     	catch(SQLiteException e) { return 0;}
-    	int total = relCursor.getCount();
     	return total;   	
     }
     
     private String fetchContractFrom(){
 		Meeting.relAdapter.openRelToRead();
 		Cursor relCursor = null;
+		String name = "Nobody";
     	try{
     		relCursor = Meeting.relAdapter.queueContractFrom();
     		relCursor.moveToFirst();
+    		if(relCursor.getCount() == 0){
+    			return name;
+    		}
+        	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
+        	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
+        	name = first + " " + last;
     	}
-    	catch(SQLiteException e) { return "FOREVER ALONE";}
-    	String last = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_LAST));
-    	String first = relCursor.getString(relCursor.getColumnIndex(RelAdapter.PARTNER_FIRST));
-    	String name = first + " " + last;
+    	catch(SQLiteException e) { return "Nobody";}
+
     	return name; 
     }
     
