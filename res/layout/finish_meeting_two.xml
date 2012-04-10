@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/page7" />
+    
+      <TextView
+        android:id="@+id/contractor_speak"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="415dp"
+        android:text="I gave HIV to: "
+        android:textColor="@color/black"
+     /> "
+    <Button
+        android:id="@+id/meetdone"
+        style="@android:style/Animation"
+       android:layout_width="86dp"
+        android:layout_height="52dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="156dp"
+        android:background="@drawable/b_click_next" />
+ 
+    <Button
+        android:id="@+id/back"
+        android:layout_width="96dp"
+        android:layout_height="61dp"
+        android:layout_alignBaseline="@+id/meetdone"
+        android:layout_alignBottom="@+id/meetdone"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/b_click_back" />
+
+    <Button
+        android:id="@+id/home"
+        style="@android:style/Animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/b_click_home" />
+
+    <TextView
+        android:id="@+id/infector_speak"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_alignBaseline="@+id/contractor_speak"
+        android:layout_alignBottom="@+id/contractor_speak"
+        android:layout_alignLeft="@+id/home"
+        android:layout_marginLeft="16dp"
+        android:text="I got HIV from: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/owner_speak"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home"
+        android:layout_marginLeft="29dp"
+        android:layout_marginTop="29dp"
+        android:layout_toRightOf="@+id/home"
+        android:text="I gave HIV to this many 		people:	"
+        android:textColor="@color/black" />
+
+</RelativeLayout>

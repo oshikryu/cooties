@@ -111,6 +111,10 @@ public class RelAdapter {
 	
 	 }
 	 
+	 /*
+	  * These three functions fetch information for the gastro
+	  * intestinal diseases
+	  */
 	 public Cursor queueInfector(){
 		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
 		Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
@@ -126,9 +130,32 @@ public class RelAdapter {
 	 }
 	 
 	 public Cursor countTotal(){
-		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
 		Cursor cursor = relsqLiteDatabase.rawQuery("SELECT DISTINCT partner_last FROM REL_TABLE WHERE" +
 				" SPREAD LIKE '1' ", null);
+		 return cursor;
+	 }
+	 
+	 /*
+	  * These three functions fetch information for HIV spreading
+	  */
+	 
+	 public Cursor queueInfectorHIV(){
+		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
+		    SPREAD_HIV +" like " + '1', null, null, null, null);
+		return cursor;
+	 }
+	 
+	 public Cursor queueContractFromHIV(){
+		String[] columns = new String[]{ROUND, PARTNER_FIRST, PARTNER_LAST, SPREAD, CONTRACT, SPREAD_HIV, CONTRACT_HIV};
+		Cursor cursor = relsqLiteDatabase.query(REL_TABLE, columns,
+		    CONTRACT_HIV +" like " + '1', null, null, null, null);
+		 return cursor;
+	 }
+	 
+	 public Cursor countTotalHIV(){
+		Cursor cursor = relsqLiteDatabase.rawQuery("SELECT DISTINCT partner_last FROM REL_TABLE WHERE" +
+				" SPREAD_HIV LIKE '1' ", null);
 		 return cursor;
 	 }
 	 

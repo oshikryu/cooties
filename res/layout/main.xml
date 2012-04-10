@@ -33,15 +33,6 @@
 
     </EditText>
 
-     <TextView
-        android:id="@+id/text1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_x="3dp"
-        android:layout_y="390dp"
-        android:singleLine="true"
-        android:text="first name:" />
-
     <EditText
         android:id="@+id/last"
         android:layout_width="100dp"
@@ -59,5 +50,22 @@
         android:layout_y="390dp"
         android:singleLine="true"
         android:text="last name:" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_x="11dp"
+        android:layout_y="390dp"
+        android:singleLine="true"
+        android:text="first name:" />
+
+    <Button
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="44dp"
+        android:layout_y="70dp"
+        android:background="@drawable/welcome" />
 
 </AbsoluteLayout>

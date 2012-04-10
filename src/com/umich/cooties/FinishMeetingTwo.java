@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 
 
-public class FinishMeeting extends Activity{
+public class FinishMeetingTwo extends Activity{
 	
 	static protected String infector;
 	protected String[] contractor;
@@ -33,7 +33,7 @@ public class FinishMeeting extends Activity{
 		
 		 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.finish_meeting);
+		setContentView(R.layout.finish_meeting_two);
 		TextView tv1 = (TextView) findViewById(R.id.owner_speak);
 		TextView tv2 = (TextView) findViewById(R.id.infector_speak);
 		TextView tv3 = (TextView) findViewById(R.id.contractor_speak);
@@ -51,16 +51,16 @@ public class FinishMeeting extends Activity{
 		Button next=(Button) findViewById(R.id.meetdone);
 		next.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View view){
-				Intent intent = new Intent(FinishMeeting.this,FinishMeetingTwo.class);
-				FinishMeeting.this.startActivity(intent);
+				Intent intent = new Intent(FinishMeetingTwo.this,CootiesActivity.class);
+				FinishMeetingTwo.this.startActivity(intent);
 			}
 		});
 		
 		Button home=(Button) findViewById(R.id.home);
 		home.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View view){
-				Intent intent = new Intent(FinishMeeting.this,CootiesActivity.class);
-				FinishMeeting.this.startActivity(intent);
+				Intent intent = new Intent(FinishMeetingTwo.this,CootiesActivity.class);
+				FinishMeetingTwo.this.startActivity(intent);
 			}
 		});
 		CootiesActivity.relAdapter.close();
@@ -72,7 +72,7 @@ public class FinishMeeting extends Activity{
 		Cursor relCursor = null;
 		String name = "Nobody";
     	try{
-    		relCursor = CootiesActivity.relAdapter.queueInfector();
+    		relCursor = CootiesActivity.relAdapter.queueInfectorHIV();
     		relCursor.moveToFirst();
     		if(relCursor.getCount() == 0){
     			return name;
@@ -90,7 +90,7 @@ public class FinishMeeting extends Activity{
 		Cursor relCursor = null;
 		int total = 0;
     	try{
-    		relCursor = CootiesActivity.relAdapter.countTotal();
+    		relCursor = CootiesActivity.relAdapter.countTotalHIV();
     		if(relCursor.getCount() == 0){
     			return total;
     		}
@@ -106,7 +106,7 @@ public class FinishMeeting extends Activity{
 		Cursor relCursor = null;
 		String name = "Nobody";
     	try{
-    		relCursor = CootiesActivity.relAdapter.queueContractFrom();
+    		relCursor = CootiesActivity.relAdapter.queueContractFromHIV();
     		relCursor.moveToFirst();
     		if(relCursor.getCount() == 0){
     			return name;

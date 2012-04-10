@@ -51,8 +51,10 @@ public class Meeting extends Activity{
     PendingIntent mNfcPendingIntent;
     IntentFilter[] mWriteTagFilters;
     IntentFilter[] mNdefExchangeFilters;
-    static protected String item;
-    static protected RelAdapter relAdapter;    
+//	static protected SimpleCursorAdapter relCursorAdapter;
+//	static protected RelAdapter relAdapter;
+//	static protected Cursor relCursor;
+    static protected String item;    
     static protected String body = null;
     static protected String my_first = null;
     static protected String my_last = null;
@@ -69,8 +71,7 @@ public class Meeting extends Activity{
     static protected Double my_probability = 0.0;
    	public static Double sharedProbability = 0.0;
    	
-    static protected SimpleCursorAdapter relCursorAdapter;
-	static protected Cursor relCursor;
+
 
 	AnimationDrawable animation;
 	public void onCreate(Bundle savedInstanceState){
@@ -100,12 +101,7 @@ public class Meeting extends Activity{
         // run the start() method later on the UI thread
         imageAnim.post(new Starter());
 		
-		//rel db and cursor initialization
-		relAdapter = new RelAdapter(this);
-		relAdapter.openRelToWrite();
-		relAdapter.openRelToRead();
-		relCursor = relAdapter.queueAll();
-		relCursor.moveToFirst();
+
 		
 		 
 		//query the database
@@ -311,7 +307,7 @@ public class Meeting extends Activity{
             }
             
             //write this shit into the relationship database
-            relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt, infectHIVInt, contractHIVInt);
+            CootiesActivity.relAdapter.insert(my_id,partnerFirst, partnerLast, infectInt, contractInt, infectHIVInt, contractHIVInt);
             
             CootiesActivity.mySQLiteAdapter.openToWrite();
             
