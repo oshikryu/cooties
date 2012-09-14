@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -66,6 +67,8 @@ public class CootiesActivity extends Activity {
 	   setContentView(R.layout.main);
 	   inputContent1 = (EditText)findViewById(R.id.first);
 	   inputContent2 = (EditText)findViewById(R.id.last);
+	   inputContent1.setTextColor(Color.BLACK);
+	   inputContent2.setTextColor(Color.BLACK);
 	   buttonAdd = (Button)findViewById(R.id.add);
 	   buttonDeleteAll = (Button)findViewById(R.id.clear);
 	   buttonDeleteAll.setOnClickListener(buttonDeleteAllOnClickListener);
