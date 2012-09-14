@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/AbsoluteLayout1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@drawable/page3" >
 
-  <ImageView
-        android:id="@+id/imageView2"
+    <Button
+        android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="bottom"
+        android:background="@drawable/b_click_back" />
+
+    <Button
+        android:id="@+id/meeting"
+        android:layout_width="78dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/page3" />
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="190dp"
+        android:background="@drawable/b_click_go"
+        android:gravity="center" />
 
-  <Button
-      android:id="@+id/back"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_x="3dp"
-      android:layout_y="420dp"
-     android:background="@drawable/b_click_back" />
-
-  <Button
-      android:id="@+id/meeting"
-      android:layout_width="78dp"
-      android:layout_height="40dp"
-      android:layout_x="213dp"
-      android:layout_y="155dp"
-      android:background="@drawable/b_click_go" />
-    
-</AbsoluteLayout>
+</RelativeLayout>

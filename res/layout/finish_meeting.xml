@@ -2,25 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/page7" />
-    
-      <TextView
-        android:id="@+id/contractor_speak"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="190dp"
-        android:layout_marginTop="415dp"
-        android:text="I gave cooties to: "
-        android:textColor="@color/black"
-     /> "
+    android:layout_height="fill_parent"
+    android:background="@drawable/page7" > "
     <Button
         android:id="@+id/meetdone"
         style="@android:style/Animation"
@@ -50,17 +33,6 @@
         android:layout_marginLeft="6dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/b_click_home" />
-
-    <TextView
-        android:id="@+id/infector_speak"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_alignBaseline="@+id/contractor_speak"
-        android:layout_alignBottom="@+id/contractor_speak"
-        android:layout_alignLeft="@+id/home"
-        android:layout_marginLeft="16dp"
-        android:text="I got cooties from: "
-        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/owner_speak"
@@ -71,6 +43,28 @@
         android:layout_marginTop="24dp"
         android:layout_toRightOf="@+id/home"
         android:text="I gave cooties to this many people: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/infector_speak"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/home"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="23dp"
+        android:layout_marginLeft="23dp"
+        android:text="I got cooties from: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/contractor_speak"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_alignBaseline="@+id/infector_speak"
+        android:layout_alignBottom="@+id/infector_speak"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="I gave cooties to: "
         android:textColor="@color/black" />
 
 </RelativeLayout>
